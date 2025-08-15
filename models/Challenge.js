@@ -9,14 +9,17 @@ const challengeSchema = new mongoose.Schema({
     },
     start_date: {
         type: Date,
-        default: Date.now,
-        required: true
+        required: true,
     },
     end_date: {
         type: Date,
-        required: true
+        required: true,
     },
 })
 
 
 module.exports = mongoose.model('Challenge', challengeSchema)
+
+
+//Other Code Needed:
+//controller or index that only allows one prompt overr a given period of time
