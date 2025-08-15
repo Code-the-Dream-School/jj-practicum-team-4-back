@@ -12,7 +12,9 @@ const likeSchema = new mongoose.Schema({
         ref: 'Artwork',
         required: true,
     },
-}, { timestamps: true })
+ }, 
+  { timestamps: true }
+)
 
 
 module.exports = mongoose.model('Like', likeSchema)

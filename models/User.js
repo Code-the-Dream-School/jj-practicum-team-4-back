@@ -1,5 +1,7 @@
 //https://mongoosejs.com/docs/guide.html
 //https://youtu.be/jZ-dzj6ut54?si=IK-79zPcCJYJWoAd
+//https://www.geeksforgeeks.org/python/python-program-to-verify-that-a-string-only-contains-letters-numbers-underscores-and-dashes/
+
 const mongoose = require('mongoose')
 
 
@@ -13,10 +15,14 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Please Provide A Username For Your Account '],
-        minlength: 2,
+        minlength: 3,
         maxlength: 20,
-        unique: true,
         trim: true,
+        match: [
+            /^[A-Za-z0-9_-]+$/,
+            'Username can only contain letters, numbers, underscores, or dashes',
+        ],
+        unique: true,
     },
     first_name: {
         type: String,
@@ -50,15 +56,13 @@ const userSchema = new mongoose.Schema({
         type: String, 
         trim: true,
     },
-    created_date: {
-        type: Date,
-        default: Date.now,
-    },
     is_admin: {
         type: Boolean,
         default: false, 
     },
-})
+  },
+   { timestamps: true }
+)
 
 
 module.exports = mongoose.model('User', userSchema)
