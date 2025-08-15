@@ -17,4 +17,5 @@ const likeSchema = new mongoose.Schema({
 
 module.exports = mongoose.model('Like', likeSchema)
 
-likeSchema.index({ user_id: 1, artwork_id: 1 }, { unique: true });
+//Needed Code Elsewhere:
+//Controller or index that allows only one like per user

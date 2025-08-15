@@ -42,7 +42,7 @@ module.exports = mongoose.model('Artwork', artworkSchema)
 
 //Needed Code Elsewhere:
 //From user_id: need to get social media handle and username for each post
-//Add code that checks to see if the user had already posted for this prompt
+//Add code that checks to see if the user had already posted for this prompt or use index
 //Add code for successful artwork submission 
 //Add code to disable uploading the image when "challenge has closed" and sending message
 //Add code that only allows thosee who have accounts to give likes
