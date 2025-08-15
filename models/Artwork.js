@@ -1,3 +1,5 @@
+//https://mongoosejs.com/docs/timestamps.html
+
 const mongoose = require('mongoose')
 
 
@@ -34,8 +36,9 @@ const artworkSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-},
-  { timestamps: true })
+ },
+  { timestamps: true }
+)
 
 
 module.exports = mongoose.model('Artwork', artworkSchema)
