@@ -1,0 +1,69 @@
+//https://mongoosejs.com/docs/guide.html
+//https://youtu.be/jZ-dzj6ut54?si=IK-79zPcCJYJWoAd
+const mongoose = require('mongoose')
+
+
+const userSchema = new mongoose.Schema({
+    googleId: {
+        type: String,
+        required: function () {
+            return !this.password //googleId is required if there is no password present
+        },
+    },
+    username: {
+        type: String,
+        required: [true, 'Please Provide A Username For Your Account '],
+        minlength: 2,
+        maxlength: 20,
+        unique: true,
+        trim: true,
+    },
+    first_name: {
+        type: String,
+        required: [true, 'Please Provide Your First Name'],
+        trim: true,
+    },
+    last_name: {
+        type: String,
+        required: [true, 'Please Provide Your Last Name'],
+        trim: true,
+    },
+    email: {
+        type: String,
+        required: [true, 'Please Provide An Email'],
+        lowercase: true,
+        trim: true,
+        match: [
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            'Please provide valid email',
+        ],
+        unique:true,
+    },
+    password: {
+        type: String,
+        minlength: 6,
+        required: function () {
+            return !this.googleId //password is required is there is no googleId
+        },
+    },
+    social_handle: {
+        type: String, 
+        trim: true,
+    },
+    created_date: {
+        type: Date,
+        default: Date.now,
+    },
+    is_admin: {
+        type: Boolean,
+        default: false, 
+    },
+})
+
+
+module.exports = mongoose.model('User', userSchema)
+
+
+///Needed Code Elsewhere:
+//- Need to add component here or in middleware that prevents google and email/password fields from being empty
+//- Use bycrypt and salt to hash passwords
