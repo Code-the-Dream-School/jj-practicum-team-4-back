@@ -5,26 +5,26 @@ const artworkSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
     },
     prompt_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Prompt',
+        required: true,
     },
     image_url: {
         type: String,
         required: [true, 'Please Attach An Image'],
     },
-    title: { //User
+    title: { 
       type: String,
-      required: true,
+      required: [true, 'Please Provide A Title'],
+      trim: true,
     },
-    description: { //User
+    description: { 
       type: String,
-      required: true,
-    },
-    created_date: {
-        type: Date,
-        default: Date.now,
+      required: [true, 'Please Provide A Description'],
+      trim: true,
     },
     like_counter: {
         type: Number,
@@ -34,7 +34,18 @@ const artworkSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-})
+},
+  { timestamps: true })
 
 
 module.exports = mongoose.model('Artwork', artworkSchema)
+
+//Needed Code Elsewhere:
+//From user_id: need to get social media handle and username for each post
+//Add code that checks to see if the user had already posted for this prompt
+//Add code for successful artwork submission 
+//Add code to disable uploading the image when "challenge has closed" and sending message
+//Add code that only allows thosee who have accounts to give likes
+
+
+

@@ -38,5 +38,5 @@ const promptSchema = new mongoose.Schema({
 module.exports = mongoose.model('Prompt', promptSchema)
 
 //Needed Code Elsewhere:
-//-logic to determine which prompt is active to make sure one is active ata time (admin action)
+//-logic to determine which prompt is active to make sure one is active at a time (admin action)
 // or add code that checks start and end dates 
