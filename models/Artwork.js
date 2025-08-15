@@ -31,6 +31,7 @@ const artworkSchema = new mongoose.Schema({
     like_counter: {
         type: Number,
         default: 0,
+        min: 0,
     },
     media_tag: { 
       type: String,
