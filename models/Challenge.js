@@ -1,3 +1,7 @@
+//https://mongoosejs.com/docs/validation.html
+//https://mongoosejs.com/docs/api/schematype.html#SchemaType.prototype.validate()
+
+
 const mongoose = require('mongoose')
 
 
@@ -14,12 +18,18 @@ const challengeSchema = new mongoose.Schema({
     end_date: {
         type: Date,
         required: true,
+        validate: {
+            validator: function (value) {
+                return value > this.start_date
+            },
+            message: 'Start date must come before end date',
+        },
     },
-})
+ },
+  { timestamps: true }
+)
 
 
 module.exports = mongoose.model('Challenge', challengeSchema)
 
 
-//Other Code Needed:
-//controller or index that only allows one prompt overr a given period of time
