@@ -9,6 +9,7 @@ const promptSchema = new mongoose.Schema({
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     description: { 
       type: String,
@@ -27,6 +28,8 @@ const promptSchema = new mongoose.Schema({
  },
   { timestamps: true }
 )
+
+promptSchema.index({ is_active: 1 })
 
 module.exports = mongoose.model('Prompt', promptSchema)
 
