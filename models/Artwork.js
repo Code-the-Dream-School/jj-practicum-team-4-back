@@ -29,13 +29,14 @@ const artworkSchema = new mongoose.Schema({
       trim: true,
     },
     like_counter: {
-        type: Number,
-        default: 0,
-        min: 0,
+      type: Number,
+      default: 0,
+      min: 0,
     },
-    media_tag: { 
+     media_tag: {
       type: String,
-      required: true,
+      enum: ['Tag1','Tag2','Tag3','Tag4','Tag5','Tag6','Tag7','Tag8', 'Tag9','Tag10'],
+      default: 'Tag1',
     },
  },
   { timestamps: true }
