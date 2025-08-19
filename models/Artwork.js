@@ -1,4 +1,3 @@
-//https://mongoosejs.com/docs/timestamps.html
 
 const mongoose = require('mongoose')
 
@@ -14,6 +13,7 @@ const ArtworkSchema = new mongoose.Schema({
         ref: 'Prompt',
         required: true,
     },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     image_url: {
         type: String,
         required: [true, 'Please Attach An Image'],
@@ -45,12 +45,12 @@ const ArtworkSchema = new mongoose.Schema({
 
 module.exports = mongoose.model('Artwork', ArtworkSchema)
 
-//Needed Code Elsewhere:
-//From user_id: need to get social media handle and username for each post
-//Add code that checks to see if the user had already posted for this prompt or use index
-//Add code for successful artwork submission 
-//Add code to disable uploading the image when "challenge has closed" and sending message
-//Add code that only allows thosee who have accounts to give likes
 
+
+
+
+
+//Notes:
+//https://mongoosejs.com/docs/timestamps.html
 
 

@@ -1,5 +1,3 @@
-//https://mongoosejs.com/docs/validation.html
-//https://mongoosejs.com/docs/api/schematype.html#SchemaType.prototype.validate()
 
 
 const mongoose = require('mongoose')
@@ -25,6 +23,8 @@ const ChallengeSchema = new mongoose.Schema({
             message: 'Start date must come before end date',
         },
     },
+    artworks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
  },
   { timestamps: true }
 )
@@ -33,3 +33,8 @@ const ChallengeSchema = new mongoose.Schema({
 module.exports = mongoose.model('Challenge', ChallengeSchema)
 
 
+
+
+//Notes:
+//https://mongoosejs.com/docs/validation.html
+//https://mongoosejs.com/docs/api/schematype.html#SchemaType.prototype.validate()
