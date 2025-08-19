@@ -4,7 +4,7 @@
 
 const mongoose = require('mongoose')
 
-const promptSchema = new mongoose.Schema({
+const PromptSchema = new mongoose.Schema({
     title: { 
       type: String,
       required: true,
@@ -31,5 +31,5 @@ const promptSchema = new mongoose.Schema({
 
 promptSchema.index({ is_active: 1 })
 
-module.exports = mongoose.model('Prompt', promptSchema)
+module.exports = mongoose.model('Prompt', PromptSchema)
 

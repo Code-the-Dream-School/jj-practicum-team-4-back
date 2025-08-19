@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 
 
-const artworkSchema = new mongoose.Schema({
+const ArtworkSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -43,7 +43,7 @@ const artworkSchema = new mongoose.Schema({
 )
 
 
-module.exports = mongoose.model('Artwork', artworkSchema)
+module.exports = mongoose.model('Artwork', ArtworkSchema)
 
 //Needed Code Elsewhere:
 //From user_id: need to get social media handle and username for each post
