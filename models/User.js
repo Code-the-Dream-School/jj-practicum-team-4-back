@@ -1,6 +1,3 @@
-//https://mongoosejs.com/docs/guide.html
-//https://youtu.be/jZ-dzj6ut54?si=IK-79zPcCJYJWoAd
-//https://www.geeksforgeeks.org/python/python-program-to-verify-that-a-string-only-contains-letters-numbers-underscores-and-dashes/
 
 const mongoose = require('mongoose')
 
@@ -60,6 +57,8 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false, 
     },
+	userArtworks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],
+	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],    
   },
    { timestamps: true }
 )
@@ -68,6 +67,8 @@ const UserSchema = new mongoose.Schema({
 module.exports = mongoose.model('User', UserSchema)
 
 
-///Needed Code Elsewhere:
-//- Need to add component here or in middleware that prevents google and email/password fields from being empty
-//- Use bycrypt and salt to hash passwords
+
+//Notes:
+//https://mongoosejs.com/docs/guide.html
+//https://youtu.be/jZ-dzj6ut54?si=IK-79zPcCJYJWoAd
+//https://www.geeksforgeeks.org/python/python-program-to-verify-that-a-string-only-contains-letters-numbers-underscores-and-dashes/

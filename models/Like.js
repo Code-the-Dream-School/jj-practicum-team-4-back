@@ -16,9 +16,7 @@ const LikeSchema = new mongoose.Schema({
   { timestamps: true }
 )
 
-likeSchema.index({ user_id: 1, artwork_id: 1 }, 
-    { unique: true }
-)
+LikeSchema.index({ user_id: 1, artwork_id: 1 }, { unique: true })
 
 module.exports = mongoose.model('Like', LikeSchema)
 

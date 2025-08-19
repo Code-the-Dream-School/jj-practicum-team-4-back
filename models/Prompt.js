@@ -1,5 +1,3 @@
-//https://www.geeksforgeeks.org/mongodb/how-to-create-and-use-enum-in-mongoose/
-//https://mongoosejs.com/docs/tutorials/dates.html
 
 
 const mongoose = require('mongoose')
@@ -29,7 +27,11 @@ const PromptSchema = new mongoose.Schema({
   { timestamps: true }
 )
 
-promptSchema.index({ is_active: 1 })
+PromptSchema.index({ is_active: 1 })
 
 module.exports = mongoose.model('Prompt', PromptSchema)
+
+//Notes:
+//https://www.geeksforgeeks.org/mongodb/how-to-create-and-use-enum-in-mongoose/
+//https://mongoosejs.com/docs/tutorials/dates.html
 
