@@ -5,7 +5,7 @@
 const mongoose = require('mongoose')
 
 
-const challengeSchema = new mongoose.Schema({
+const ChallengeSchema = new mongoose.Schema({
     prompt_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Prompt',
@@ -30,6 +30,6 @@ const challengeSchema = new mongoose.Schema({
 )
 
 
-module.exports = mongoose.model('Challenge', challengeSchema)
+module.exports = mongoose.model('Challenge', ChallengeSchema)
 
 
