@@ -1,17 +1,21 @@
 require('dotenv').config()
+require('./auth')
 const express = require('express')
 const session = require('express-session')
 const passport = require('passport')
 const mongoose = require('mongoose')
+const connectDB = require('./db/connect')
 const cors = require('cors')
 const favicon = require('express-favicon')
 const logger = require('morgan')
 
-//ConnectDB
-const connectDB = require('./db/connect')
 
+// MongoDB
 
-//Session Initalization
+connectDB(process.env.MONGO_URI)
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err))
+
 const app = express()
 app.use(session({
     secret: process.env.SESSION_SECRET || 'NA',
