@@ -10,7 +10,7 @@ const favicon = require('express-favicon')
 const logger = require('morgan')
 
 
-// MongoDB
+//Mongo
 
 connectDB(process.env.MONGO_URI)
 .then(() => console.log('MongoDB connected'))
@@ -19,8 +19,8 @@ connectDB(process.env.MONGO_URI)
 const app = express()
 app.use(session({
     secret: process.env.SESSION_SECRET || 'NA',
-    resave: false, //Removes terminal warnings
-    saveUninitialized: false, //Removes terminal warnings
+    resave: false, 
+    saveUninitialized: false,
 }))
 
 //Passport Inialization

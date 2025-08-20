@@ -14,7 +14,7 @@ passport.use(new GoogleStrategy({
         if (!user) {
           user = await User.create({
             googleId: profile.id,
-            username: profile.displayName.replace(/\s+/g, '').toLowerCase(), //This Will Need To Change In The Future
+            username: profile.displayName.replace(/\s+/g, '').toLowerCase(), //THIS WILL CHANGE IN THE FUTURE
             first_name: profile.name.givenName,
             last_name: profile.name.familyName,
             email: profile.email,
