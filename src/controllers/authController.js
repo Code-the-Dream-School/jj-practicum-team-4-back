@@ -5,7 +5,7 @@ function isLoggedIn(req, res, next) {
 } ///middleware component
 
 const landingPage = (req, res) => {
-    res.send('<a href="/auth/google">Authentication with Google </a>')
+    res.status(200).send('<a href="/auth/google">Authentication with Google </a>')
 } 
 
 const googleAuth = passport.authenticate('google', { scope: ['email', 'profile']})
@@ -16,12 +16,15 @@ const googleCallback = passport.authenticate('google', {
 })
 
 const authFailure = (req, res) => {
-    console.log('Something Went Wrong..')
+    res.status(404).send({ error: 'Something Went Wrong'})
 }
 
 const protectedPage = (req, res) => {
-    res.send(`Welcome ${req.user.username}`) 
-    console.log('You have been signed in')
+    if (req.user) {
+        res.status(200).send({ message: `Welcome ${req.user.username}`})
+    } else {
+        res.status(401).send({ error: 'No User Has Been Found.'})
+    }
 }
 
 const logoutUser = (req, res, next) => {
@@ -29,8 +32,7 @@ const logoutUser = (req, res, next) => {
         if (err) {
             return next(err)
         }
-        console.log('You have been logged out')
-        res.redirect('/')
+        res.status(200).send({ message: 'You have been logged out'})
     })
 }
 module.exports = {
