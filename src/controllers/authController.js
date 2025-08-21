@@ -1,19 +1,7 @@
-const passport = require('passport')
-
-function isLoggedIn(req, res, next) {
-    req.user ? next() : res.sendStatus(401) 
-} ///middleware component
 
 const landingPage = (req, res) => {
     res.status(200).send('<a href="/auth/google">Authentication with Google </a>')
 } 
-
-const googleAuth = passport.authenticate('google', { scope: ['email', 'profile']})
-
-const googleCallback = passport.authenticate('google', {
-    successRedirect: '/protected',
-    failureRedirect: '/auth/failure',
-})
 
 const authFailure = (req, res) => {
     res.status(404).send({ error: 'Something Went Wrong'})
@@ -35,11 +23,9 @@ const logoutUser = (req, res, next) => {
         res.status(200).send({ message: 'You have been logged out'})
     })
 }
+
 module.exports = {
-    isLoggedIn,
     landingPage,
-    googleAuth,
-    googleCallback,
     authFailure,
     protectedPage,
     logoutUser,

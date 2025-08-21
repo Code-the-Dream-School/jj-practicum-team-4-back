@@ -1,7 +1,8 @@
 const express = require ('express')
 const router = express.Router()
 
-const { isLoggedIn, landingPage, googleAuth, googleCallback, authFailure, protectedPage, logoutUser } = require('../controllers/authController')
+const { isLoggedIn,  googleAuth, googleCallback, } = require('../middleware/auth')
+const { landingPage, authFailure, protectedPage, logoutUser } = require('../controllers/authController')
 
 router.get('/', landingPage)
 router.get('/auth/google', googleAuth)
