@@ -13,7 +13,6 @@ const ArtworkSchema = new mongoose.Schema({
         ref: 'Prompt',
         required: true,
     },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     image_url: {
         type: String,
         required: [true, 'Please Attach An Image'],
