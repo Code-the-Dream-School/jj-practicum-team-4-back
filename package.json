@@ -10,10 +10,15 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-favicon": "^2.0.4",
-    "mongoose": "^8.16.5",
-    "morgan": "^1.10.1"
+    "express-session": "^1.18.2",
+    "mongodb": "^6.18.0",
+    "mongoose": "^8.17.2",
+    "morgan": "^1.10.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth2": "^0.2.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
