@@ -11,7 +11,7 @@ const googleAuth = passport.authenticate('google', { scope: ['email', 'profile']
 
 const googleCallback = passport.authenticate('google', {
     successRedirect: '/protected',
-    failureRedirect: '/auth/failure',
+    failureRedirect: '/auth/google',
 })
 
 module.exports = { 
