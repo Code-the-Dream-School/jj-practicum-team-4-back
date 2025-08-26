@@ -11,6 +11,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
+    "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-favicon": "^2.0.4",
     "express-session": "^1.18.2",
@@ -22,5 +23,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
-  }
+  },
+  "keywords": []
 }
