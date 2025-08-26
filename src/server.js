@@ -2,8 +2,8 @@ require("dotenv").config();
 const { PORT = 8000 } = process.env;
 const app = require("./app");
 
-const { connectDB } = require("./db/mongoose");
-const { initModels } = require("./models/init");
+const { connectDB } = require('./db/mongoose');
+const { initModels } = require('../models/init');
 
 async function startServer() {
     try {
