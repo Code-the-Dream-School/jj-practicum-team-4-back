@@ -4,13 +4,13 @@
   "description": "Back-End Repo for Team 1 of Baboon/Bald Eagle Practicum",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "seed": "node src/seed/seed.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-favicon": "^2.0.4",

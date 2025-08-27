@@ -1,0 +1,94 @@
+[
+  {
+    "key": "c1_past",
+    "prompt_key": "p1",
+    "start_in_days": -7,
+    "end_in_days": -1
+  },
+
+  {
+    "key": "c2_active",
+    "prompt_key": "p2",
+    "start_in_days": 0,
+    "end_in_days": 6
+  },
+
+  {
+    "key": "c3_future",
+    "prompt_key": "p3",
+    "start_in_days": 7,
+    "end_in_days": 13
+  },
+  {
+    "key": "c4_future",
+    "prompt_key": "p4",
+    "start_in_days": 14,
+    "end_in_days": 20
+  },
+  {
+    "key": "c5_future",
+    "prompt_key": "p5",
+    "start_in_days": 21,
+    "end_in_days": 27
+  },
+  {
+    "key": "c6_future",
+    "prompt_key": "p6",
+    "start_in_days": 28,
+    "end_in_days": 34
+  },
+  {
+    "key": "c7_future",
+    "prompt_key": "p7",
+    "start_in_days": 35,
+    "end_in_days": 41
+  },
+  {
+    "key": "c8_future",
+    "prompt_key": "p8",
+    "start_in_days": 42,
+    "end_in_days": 48
+  },
+  {
+    "key": "c9_future",
+    "prompt_key": "p9",
+    "start_in_days": 49,
+    "end_in_days": 55
+  },
+  {
+    "key": "c10_future",
+    "prompt_key": "p10",
+    "start_in_days": 56,
+    "end_in_days": 62
+  },
+  {
+    "key": "c11_future",
+    "prompt_key": "p11",
+    "start_in_days": 63,
+    "end_in_days": 69
+  },
+  {
+    "key": "c12_future",
+    "prompt_key": "p12",
+    "start_in_days": 70,
+    "end_in_days": 76
+  },
+  {
+    "key": "c13_future",
+    "prompt_key": "p13",
+    "start_in_days": 77,
+    "end_in_days": 83
+  },
+  {
+    "key": "c14_future",
+    "prompt_key": "p14",
+    "start_in_days": 84,
+    "end_in_days": 90
+  },
+  {
+    "key": "c15_future",
+    "prompt_key": "p15",
+    "start_in_days": 91,
+    "end_in_days": 97
+  }
+]
