@@ -1,25 +1,10 @@
 const { PORT = 5000 } = process.env;
 const app = require("./app");
 
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.SESSION_SECRET) {
+  console.error('Missing required environment variables');
+  process.exit(1);
+}
+
 const listener = () => console.log(`Listening on Port ${PORT}!`);
 app.listen(PORT, listener);
-
-// 
-// const { connectDB } = require("./db/mongoose");
-// const { initModels } = require("./models/init");
-// 
-// async function startServer() {
-//     try {
-//         await connectDB();
-//         await initModels();
-// 
-//         app.listen(PORT, () => {
-// 
-// console.log(`Listening on Port ${PORT}!`);
-//         });
-//     } catch (err) {
-//         console.error("Failed to start server:", err.message);
-//         process.exit(1);
-//     }
-// }
-// startServer();

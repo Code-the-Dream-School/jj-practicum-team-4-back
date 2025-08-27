@@ -1,10 +1,14 @@
 const passport = require('passport')
 
 const isLoggedIn = (req, res, next) => {
-    if (req.user) {
-        return next()
+    try {
+        if (req.user) {
+            return next()
+        }
+        res.status(401).send({ error: 'User Not Authenticated' })
+    } catch (error) {
+        res.status(500).send({ error: 'Internal Issue Authenticating User' })
     }
-    res.status(401).json({ error: 'User not authenticated' })
 }
 
 const googleAuth = passport.authenticate('google', { scope: ['email', 'profile']})
