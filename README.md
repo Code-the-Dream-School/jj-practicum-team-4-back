@@ -1,3 +1,39 @@
+# ARTHIVE
+ArtHive is a creative platform designed for artists of all levels who want inspiration and community.  
+Each week, the app sends out a unique art challenge to spark creativity and encourage many artist to come together.  
+By combining structured challenges with a collaborative space, ArtHive helps artists stay motivated, improve their skills, and share their creativity with a wider audience.
+
+## Prerequisites
+Before running this project, please make sure your development environment has the following installed:
+- Node.js : https://nodejs.org/en
+- npm : https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+- MongoDB : https://www.mongodb.com/try/download/community
+- Git : https://git-scm.com/downloads
+
+### Dependencies
+
+Please install these packages into your development environemnt:
+    - cors
+    - dotenv
+    - express
+    - express-favicon
+    - express-session
+    - mongodb
+    - mongoose
+    - morgan
+    - passport
+    - passport-google-oauth2
+    - jsonwebtoken
+
+#### Testing Application
+
+To start the application, run:
+
+npm run dev
+
+Then open http://localhost:5000 in your browser.
+
+--------------------------------------------------------
 # Back-End Repo for Node/React Practicum
 
 This will be the API for the front-end React app part of your practicum project.
