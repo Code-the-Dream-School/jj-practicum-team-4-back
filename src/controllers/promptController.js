@@ -3,6 +3,23 @@
 const Prompt = require("../../models/Prompt");
 const Challenge = require("../../models/Challenge");
 
+// keep only one active prompt flag true
+
+async function syncPromptActiveFlag(activePromptId) {
+  //clear flag at all other prompts
+  await Prompt.updateMany(
+    { _id: { $ne: activePromptId }, is_active: true },
+    { $set: { is_active: false } }
+  );
+
+  // Ensure that needed prompt is true
+
+  await Prompt.updateOne(
+    { _id: activePromptId },
+    { $set: { is_active: true } }
+  );
+}
+
 // GET /api/prompts/active (read only. Find active Challenge by dates, return it's Prompt like acceptance criterias ask)
 
 const getActivePrompt = async (req, res, next) => {
@@ -23,6 +40,8 @@ const getActivePrompt = async (req, res, next) => {
     }
 
     const p = activeChallenge.prompt_id;
+
+    await syncPromptActiveFlag(p._id); // Synchronization
 
     // Shape as in accept.creterias. Dates come from Challenge. Rule maps from 'riles'
 
