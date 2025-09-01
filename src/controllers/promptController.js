@@ -20,6 +20,19 @@ async function syncPromptActiveFlag(activePromptId) {
   );
 }
 
+// helper to compute current UTC week (Sun 00:00 → next Sun 00:00)
+function getCurrentWeekWindowUTC(now = new Date()) {
+  const utcDay = now.getUTCDay(); // 0 = Sunday
+  const start = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() - utcDay, // back to Sunday
+    0, 0, 0, 0
+  ));
+  const end = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000); // +7 days
+  return { start, end };
+}
+
 // GET /api/prompts/active (read only. Find active Challenge by dates, return it's Prompt like acceptance criterias ask)
 
 const getActivePrompt = async (req, res, next) => {
@@ -27,13 +40,45 @@ const getActivePrompt = async (req, res, next) => {
     const now = new Date();
 
     //Find a challenge that is "now"
-    const activeChallenge = await Challenge.findOne({
+    let activeChallenge = await Challenge.findOne({
       start_date: { $lte: now },
       end_date: { $gte: now },
     }).populate({
       path: "prompt_id",
       select: "title description rules is_active",
     });
+
+    // if no active window by dates, try to create one for the currently active prompt
+    if (!activeChallenge) {
+      const activePrompt = await Prompt.findOne({ is_active: true }).select(
+        "title description rules is_active"
+      );
+
+      if (activePrompt) {
+        const { start, end } = getCurrentWeekWindowUTC(now);
+
+        // idem: avoid duplicates for this prompt and this exact window
+        let createdChallenge = await Challenge.findOne({
+          prompt_id: activePrompt._id,
+          start_date: start,
+          end_date: end,
+        });
+
+        if (!createdChallenge) {
+          createdChallenge = await Challenge.create({
+            prompt_id: activePrompt._id,
+            start_date: start,
+            end_date: end,
+          });
+        }
+
+        // populate to keep the same shape as above
+        activeChallenge = await Challenge.findById(createdChallenge._id).populate({
+          path: "prompt_id",
+          select: "title description rules is_active",
+        });
+      }
+    }
 
     if (!activeChallenge || !activeChallenge.prompt_id) {
       return res.status(200).json({ success: true, prompt: null });
