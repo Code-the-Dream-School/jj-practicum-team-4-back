@@ -9,7 +9,6 @@ const Prompt = require("../../models/Prompt");
 const User = require("../../models/User");
 const Challenge = require("../../models/Challenge");
 const Artwork = require("../../models/Artwork");
-const Like = require("../../models/Like");
 
 const DATA_DIR = path.join(__dirname, "data");
 
@@ -36,7 +35,6 @@ async function main() {
 
   try {
     // clear
-    await Like.deleteMany({});
     await Artwork.deleteMany({});
     await Challenge.deleteMany({});
     await Prompt.deleteMany({});
@@ -48,12 +46,6 @@ async function main() {
     const usersData = readJSON("users.json");
     const challengesData = readJSON("challenges.json");
     const artworksData = readJSON("artworks.json");
-    let likesData = [];
-    try {
-      likesData = readJSON("likes.json");
-    } catch {
-      console.warn("likes.json not found — skip likes");
-    }
 
     // 1) prompts
     const promptIdByKey = new Map();
@@ -120,32 +112,6 @@ async function main() {
       artworkIdByKey.set(a.key, doc._id);
     }
     console.log(`Inserted artworks: ${artworkIdByKey.size}`);
-
-    // 5) likes from JSON
-    let createdLikes = 0,
-      skipped = 0;
-    for (const l of likesData) {
-      const uid = userIdByKey.get(l.user_key);
-      const aid = artworkIdByKey.get(l.artwork_key);
-      if (!uid || !aid) {
-        skipped++;
-        continue;
-      }
-      try {
-        await Like.create({ user_id: uid, artwork_id: aid });
-        createdLikes++;
-      } catch {
-        /* ignore duplicates if unique index exists */
-      }
-    }
-    console.log(`Inserted likes: ${createdLikes} (skipped: ${skipped})`);
-
-    // sync like_counter to actual counts
-    for (const [, aid] of artworkIdByKey) {
-      const count = await Like.countDocuments({ artwork_id: aid });
-      await Artwork.findByIdAndUpdate(aid, { like_counter: count });
-    }
-    console.log("like_counter synced to Like collection");
 
     console.log("Seeding done.");
   } catch (e) {
