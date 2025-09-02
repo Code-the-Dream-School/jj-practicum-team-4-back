@@ -10,7 +10,7 @@ const signinLink = (req, res) => {
 const protectedPage = (req, res) => {
     try {
         if (req.user) {
-            res.status(200).send({ message: `Welcome To ARTHIVE ${req.user.username}`})
+            res.status(200).send({ message: `Welcome To ARTHIVE ${req.user.first_name}`}) //Look at previous PR's to find the username method
         } else {
             res.status(401).send({ error: 'No User Was Found, Unable To Sign In'})
         }
