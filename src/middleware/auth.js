@@ -14,7 +14,7 @@ const isLoggedIn = (req, res, next) => {
 const googleAuth = passport.authenticate('google', { scope: ['email', 'profile']})
 
 const googleCallback = passport.authenticate('google', {
-    successRedirect: '/protected',
+    successRedirect: '/auth/protected',
     failureRedirect: '/auth/google',
 })
 

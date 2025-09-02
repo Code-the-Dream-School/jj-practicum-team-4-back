@@ -41,7 +41,7 @@ app.use(favicon(__dirname + '/public/favicon.ico'))
 
 // routes
 app.use('/api/v1', mainRouter)
-app.use('/', authRouter)
+app.use('/auth', authRouter)
 
 
 module.exports = app
