@@ -15,10 +15,33 @@ Before running this project, please make sure your development environment has t
 - MongoDB : https://www.mongodb.com/try/download/community
 - Git : https://git-scm.com/downloads
 
-#### Google Console Set-Up
+##### Google Console Set-Up
 - Please make sure you have a developer account with Google (https://developers.google.com/). 
 - Once you do, redirect to Google Cloud Console (https://console.cloud.google.com) and create a Google Cloud Hub for your application (https://cloud.google.com/hub/docs/setup-cloud-hub). 
 - During the application set-up, Google will give you the application GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET. You will need to make sure you have the same GOOGLE_CALLBACK_URL between Google Cloud Console and the Google Cloud Hub.
+
+#### MONGO DB Connection
+
+##### MONGO DB Atlas
+To connect your project to the MongoDB Atlas Database, please follow these instructions:
+1. Create or login to your MongoDB Atlas Account (https://www.mongodb.com/products/platform/atlas-database).
+2. Once logged in, in the top left corner click on Project and select or add the project that you would like to work on.
+3. Once you are in your desired project dashboard, click on the connect button and select drivers.
+4. Select your connection driver and version and then copy the Mongo URL.
+
+ Note: In the Mongo URL, these components will need to be replaced:
+ - Replace <username> with the username of the database user you created.
+ - Replace <password> with that user's password. Do not share this connection string publicly.
+
+##### MONGO DB Compass
+To connect your project to the MongoDB Compass Database please follow these instructions:
+1. Download MongoDB Compass (https://www.mongodb.com/try/download/compass).
+2. Choose the appropriate download package for your operating system.
+3. Run the download installer and complete the installation.
+4. Once the application has been successfully installed, open MOngoDB Compass on your computer.
+5. Click on the (+) in the left hand side to add a new connection.
+6. In the URI, replace the pre-determind link with your connection string from MongoDB Atlas. 
+7. Click save and then click connect.
 
 
 ## Application Package Installation 
