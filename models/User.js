@@ -1,6 +1,7 @@
 
 const mongoose = require('mongoose')
 
+
 const UserSchema = new mongoose.Schema({
     googleId: {
         type: String,
@@ -10,7 +11,6 @@ const UserSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-        required: [true, 'Please Provide A Username For Your Account '],
         minlength: 3,
         maxlength: 20,
         trim: true,
@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
             /^[A-Za-z0-9_-]+$/,
             'Username can only contain letters, numbers, underscores, or dashes',
         ],
-        unique: true,
+        sparse: true,
     },
     first_name: {
         type: String,
@@ -56,8 +56,8 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false, 
     },
-	userArtworks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],
-	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],    
+    userArtworks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],    
   },
    { timestamps: true }
 )
