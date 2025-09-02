@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
     googleId: {
         type: String,
         required: function () {
-            return !this.password //googleId is required if there is no password present
+            return !this.password 
         },
     },
     username: {
@@ -46,7 +46,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         minlength: 6,
         required: function () {
-            return !this.googleId //password is required is there is no googleId
+            return !this.googleId 
         },
     },
     social_handle: {
