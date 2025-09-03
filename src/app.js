@@ -8,6 +8,8 @@ const connectDB = require("./db/connect");
 const cors = require("cors");
 const favicon = require("express-favicon");
 const logger = require("morgan");
+const cron = require("node-cron");
+const { runPromptSync } = require("../src/controllers/promptController.js");
 
 //MongoDB
 
@@ -42,9 +44,28 @@ app.use(express.static("public"));
 app.use(favicon(__dirname + "/public/favicon.ico"));
 
 // routes
-app.use("/api/v1", mainRouter);
+app.use("/api", mainRouter);
 app.use("/", authRouter);
-app.use("/api/v1/prompts", promptRouter);
+app.use("/api/prompts", promptRouter);
+
+//CRON scheduler
+
+if (process.env.ENABLE_CRON === "true") {
+  //once a week: Sunday 00:05 UTC  -> 5 0 * * 0 ("* * * * *" - for test only)
+  cron.schedule(
+    "5 0 * * 0",
+    async () => {
+      try {
+        const result = await runPromptSync();
+        console.log("[CRON] weekly sync done:", JSON.stringify(result));
+      } catch (e) {
+        console.error("[CRON] weekly sync failed:", e?.message || e);
+      }
+    },
+    { timezone: "Etc/UTC" }
+  );
+
+  console.log("[CRON] registered: Sun 00:05 UTC");
+}
 
 module.exports = app;
-//Testing
