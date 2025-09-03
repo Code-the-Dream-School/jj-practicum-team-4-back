@@ -9,7 +9,7 @@ const isLoggedIn = (req, res, next) => {
         }
         const authHeader = req.headers.authorization
             if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                return res.status(401).json({ error: 'No Token Provided' })
+                return res.status(401).json({ error: 'User Not Authenticated' })
             }
 
         const token = authHeader.split(' ')[1]
