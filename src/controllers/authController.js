@@ -69,7 +69,7 @@ const register = async (req, res) => {
         }
 
         if (error.code === 11000) {
-            return res.status(400).json({ error: 'Registration failed: An account with this email already exists.' })
+            return res.status(400).json({ error: 'Registration failed: An account with this email already exists. Please try signing in with Google.' })
         }
 
         res.status(500).json({ error: 'Unexpected server error during registration. Please try again later.' })
