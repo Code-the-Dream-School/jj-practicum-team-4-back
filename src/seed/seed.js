@@ -1,4 +1,7 @@
-// src/seed/data/likes.json and src/seed/data/artworks.json: The temporary 'key' field was introduced only for seeding purposes. It gives each seed record a unique identifier so that related JSON files (artworks, likes, etc.) can reference each other reliably without depending on non-unique fields like 'title'. In the database, the actual identifier is the MongoDB _id, and this 'key' field is not part of the production schema.
+/* eslint-disable no-console */
+// src/seed/data/artworks.json: The temporary 'key' field is only for seeding.
+// It lets JSON files reference each other without relying on non-unique 'title'.
+// In the database the real identifier is MongoDB _id; 'key' is not part of the schema.
 
 const path = require("path");
 const fs = require("fs");
@@ -24,9 +27,9 @@ function dayOffset(n) {
 }
 
 async function main() {
-  const uri = process.env.MONGO_URI;
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
   if (!uri) {
-    console.error("MONGO_URI is missing in .env");
+    console.error("MONGODB_URI or MONGO_URI is missing in .env");
     process.exit(1);
   }
 
@@ -77,6 +80,7 @@ async function main() {
     console.log(`Inserted users: ${userIdByKey.size}`);
 
     // 3) challenges (+ set active prompt)
+    await Prompt.updateMany({}, { is_active: false });
     const now = new Date();
     let active = 0;
     for (const c of challengesData) {
@@ -97,21 +101,43 @@ async function main() {
       `Inserted challenges: ${challengesData.length} (active now: ${active})`
     );
 
-    // 4) artworks (temporary like_counter from JSON; will sync later)
-    const artworkIdByKey = new Map();
+    // 4) artworks (create all, collect docs)
+    const artworkDocs = [];
     for (const a of artworksData) {
+      const userId = userIdByKey.get(a.user_key);
+      const promptId = promptIdByKey.get(a.prompt_key);
       const doc = await Artwork.create({
-        user_id: userIdByKey.get(a.user_key),
-        prompt_id: promptIdByKey.get(a.prompt_key),
+        user_id: userId,
+        prompt_id: promptId,
         image_url: a.image_url,
         title: a.title,
         description: a.description,
-        media_tag: a.media_tag,
-        like_counter: a.like_counter || 0,
+        media_tag: a.media_tag, // must be one of ['Tag1'..'Tag10']
+        like_counter: a.like_counter || 0, // starting value from JSON
       });
-      artworkIdByKey.set(a.key, doc._id);
+      artworkDocs.push(doc);
+
+      // attach to user's userArtworks
+      await User.findByIdAndUpdate(userId, {
+        $push: { userArtworks: doc._id },
+      });
     }
-    console.log(`Inserted artworks: ${artworkIdByKey.size}`);
+    console.log(`Inserted artworks: ${artworkDocs.length}`);
+
+    // 5) seed basic "likes" arrays on users (optional demo data)
+    // For each user, like 2 random artworks and increment counters.
+    // NOTE: This is only to populate User.
+    const userIds = Array.from(userIdByKey.values());
+    for (const uid of userIds) {
+      // pick 2 random different artworks
+      const shuffled = [...artworkDocs].sort(() => 0.5 - Math.random());
+      const sample = shuffled.slice(0, 2);
+      for (const art of sample) {
+        await User.findByIdAndUpdate(uid, { $push: { likes: art._id } });
+        await Artwork.findByIdAndUpdate(art._id, { $inc: { like_counter: 1 } });
+      }
+    }
+    console.log("Filled User.likes and adjusted like_counter");
 
     console.log("Seeding done.");
   } catch (e) {
