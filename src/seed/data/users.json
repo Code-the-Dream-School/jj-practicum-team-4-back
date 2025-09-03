@@ -1,0 +1,92 @@
+[
+  {
+    "key": "u_admin",
+    "username": "admin",
+    "first_name": "Art",
+    "last_name": "Admin",
+    "email": "admin@arthive.test",
+    "social_handle": "@arthive_admin",
+    "is_admin": true,
+    "googleId": "seed-google-admin"
+  },
+  {
+    "key": "u_alice",
+    "username": "alice",
+    "first_name": "Alice",
+    "last_name": "Painter",
+    "email": "alice@arthive.test",
+    "social_handle": "@alice_art",
+    "is_admin": false,
+    "googleId": "seed-google-alice"
+  },
+  {
+    "key": "u_bob",
+    "username": "bob",
+    "first_name": "Bob",
+    "last_name": "Sketcher",
+    "email": "bob@arthive.test",
+    "social_handle": "@bob_sketch",
+    "is_admin": false,
+    "googleId": "seed-google-bob"
+  },
+  {
+    "key": "u_chris",
+    "username": "chris",
+    "first_name": "Chris",
+    "last_name": "Ink",
+    "email": "chris@arthive.test",
+    "social_handle": "@chris_ink",
+    "is_admin": false,
+    "googleId": "seed-google-chris"
+  },
+  {
+    "key": "u_dana",
+    "username": "dana",
+    "first_name": "Dana",
+    "last_name": "Photo",
+    "email": "dana@arthive.test",
+    "social_handle": "@dana_photo",
+    "is_admin": false,
+    "googleId": "seed-google-dana"
+  },
+  {
+    "key": "u_eli",
+    "username": "eli",
+    "first_name": "Eli",
+    "last_name": "Maker",
+    "email": "eli@arthive.test",
+    "social_handle": "@eli_maker",
+    "is_admin": false,
+    "googleId": "seed-google-eli"
+  },
+  {
+    "key": "u_fay",
+    "username": "fay",
+    "first_name": "Fay",
+    "last_name": "Sculp",
+    "email": "fay@arthive.test",
+    "social_handle": "@fay_sculp",
+    "is_admin": false,
+    "googleId": "seed-google-fay"
+  },
+  {
+    "key": "u_gus",
+    "username": "gus",
+    "first_name": "Gus",
+    "last_name": "Tone",
+    "email": "gus@arthive.test",
+    "social_handle": "@gus_tone",
+    "is_admin": false,
+    "googleId": "seed-google-gus"
+  },
+  {
+    "key": "u_ivy",
+    "username": "ivy",
+    "first_name": "Ivy",
+    "last_name": "Lines",
+    "email": "ivy@arthive.test",
+    "social_handle": "@ivy_lines",
+    "is_admin": false,
+    "googleId": "seed-google-ivy"
+  }
+]

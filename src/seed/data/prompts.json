@@ -1,0 +1,107 @@
+[
+  {
+    "key": "p1",
+    "title": "Urban Sketch — Morning Commute",
+    "description": "Capture the rhythm of the city during morning rush hour.",
+    "rules": "Draw or paint on-location references or your own photos only. One submission per user.",
+    "is_active": false
+  },
+  {
+    "key": "p2",
+    "title": "Monochrome Mood",
+    "description": "Create a piece using only one color family and its values.",
+    "rules": "Single hue with tints/shades only. No multi-color blending.",
+    "is_active": false
+  },
+  {
+    "key": "p3",
+    "title": "Found Objects",
+    "description": "Assemble an artwork from objects found around you.",
+    "rules": "Man-made and from nature both acceptable",
+    "is_active": false
+  },
+  {
+    "key": "p4",
+    "title": "Night Lights",
+    "description": "Explore artificial light sources after dark.",
+    "rules": "Low-light references encouraged. Share camera settings if photo.",
+    "is_active": false
+  },
+  {
+    "key": "p5",
+    "title": "Hands at Work",
+    "description": "Depict hands creating or building something.",
+    "rules": "Focus on gesture and process details; avoid generic poses.",
+    "is_active": false
+  },
+  {
+    "key": "p6",
+    "title": "Reflections",
+    "description": "Create an artwork that uses reflections (glass, water, metal).",
+    "rules": "Reflections must be central to composition.",
+    "is_active": false
+  },
+  {
+    "key": "p7",
+    "title": "Negative Space",
+    "description": "Design a composition driven by negative space.",
+    "rules": "At least 40% of the area should be negative space.",
+    "is_active": false
+  },
+  {
+    "key": "p8",
+    "title": "Texture Study",
+    "description": "Showcase contrasting textures within one piece.",
+    "rules": "Use at least two clearly different textures.",
+    "is_active": false
+  },
+  {
+    "key": "p9",
+    "title": "Motion Blur",
+    "description": "Express motion—literally or abstractly.",
+    "rules": "Use lines, blur, or repeated forms to suggest movement.",
+    "is_active": false
+  },
+  {
+    "key": "p10",
+    "title": "Tiny Worlds",
+    "description": "Imagine a miniature environment with its own rules.",
+    "rules": "Include at least three distinct micro-elements.",
+    "is_active": false
+  },
+  {
+    "key": "p11",
+    "title": "Rainy Day",
+    "description": "Celebrate rain—drops, puddles, skies, or mood.",
+    "rules": "Water/rain elements must be clearly visible.",
+    "is_active": false
+  },
+  {
+    "key": "p12",
+    "title": "Silhouettes",
+    "description": "Tell a story using silhouettes and strong shapes.",
+    "rules": "Limit details inside silhouettes; emphasize contours.",
+    "is_active": false
+  },
+  {
+    "key": "p13",
+    "title": "From Above",
+    "description": "Use a top-down or aerial viewpoint.",
+    "rules": "Perspective must be clearly from above.",
+    "is_active": false
+  },
+  {
+    "key": "p14",
+    "title": "Daily Ritual",
+    "description": "Document a small ritual from everyday life.",
+    "rules": "Add a 1–2 sentence caption describing the ritual.",
+    "is_active": false
+  },
+  {
+    "key": "p15",
+    "title": "Contrast of Scale",
+    "description": "Place very large and very small elements together.",
+    "rules": "Include at least one exaggerated size contrast.",
+    "is_active": false
+  }
+]
