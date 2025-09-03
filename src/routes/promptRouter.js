@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const { getActivePrompt } = require("../controllers/promptController");
 
-// GET /api/v1/prompts/active
+// GET /api/prompts/active
 router.get("/active", getActivePrompt);
 
 module.exports = router;
