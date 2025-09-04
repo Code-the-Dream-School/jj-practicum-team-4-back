@@ -1,4 +1,5 @@
-const { PORT = 5000 } = process.env;
+// Use PORT from .env file without a hardcoded default
+const PORT = process.env.PORT || 8000;
 const app = require("./app");
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.SESSION_SECRET) {
