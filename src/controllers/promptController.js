@@ -112,6 +112,7 @@ async function runPromptSync(now = new Date()) {
   return {
     success: true,
     prompt: {
+      
       _id: p._id,
       title: p.title,
       description: p.description,
