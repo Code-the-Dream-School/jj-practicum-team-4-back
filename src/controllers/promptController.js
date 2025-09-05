@@ -4,6 +4,7 @@ const Prompt = require("../../models/Prompt");
 const Challenge = require("../../models/Challenge");
 
 // keep only one active prompt flag true
+//turns off all others and enables the given on flag
 
 async function syncPromptActiveFlag(activePromptId) {
   //clear flag at all other prompts
@@ -39,60 +40,75 @@ function getCurrentWeekWindowUTC(now = new Date()) {
 }
 
 // Function for both: endpoint and CRON
+// priority = dates in 'challenge'
+// find challenge covering the current week window
+// if found -> find its prompt_id and return
+// if not found -> create a challenge for this week with a picked prompt,
+// then sync flags and return that prompt
 async function runPromptSync(now = new Date()) {
-  //Find a challenge that is "now"
+  // 1) Week window (UTC)
+  const { start, end } = getCurrentWeekWindowUTC(now);
+
+  // 2) Find challenge covering this week
   let activeChallenge = await Challenge.findOne({
-    start_date: { $lte: now },
-    end_date: { $gte: now },
+    start_date: start,
+    end_date: end,
   }).populate({
     path: "prompt_id",
     select: "title description rules is_active",
   });
 
-  // if no active window by dates, try to create one for the currently active prompt
+  // 3) If no challenge -> reset active prompt from last week, create a challenge with a RANDOM not-active prompt
   if (!activeChallenge) {
-    const activePrompt = await Prompt.findOne({ is_active: true }).select(
-      "title description rules is_active"
+    await Prompt.updateMany(
+      { is_active: true },
+      { $set: { is_active: false } }
+    ); // reset an old active flag
+
+    const candidates = await Prompt.aggregate([
+      { $match: { is_active: false } },
+      { $sample: { size: 1 } },
+    ]);
+
+    let promptIdToUse = candidates[0]?._id;
+
+    if (!promptIdToUse) {
+      const any = await Prompt.aggregate([{ $sample: { size: 1 } }]);
+      promptIdToUse = any[0]?._id;
+    }
+    if (!promptIdToUse) {
+      // if there are no prompts at all in DB
+      return { success: true, prompt: null };
+    }
+    const created = await Challenge.findOneAndUpdate(
+      { start_date: start, end_date: end },
+      {
+        $setOnInsert: {
+          prompt_id: promptIdToUse,
+          artworks: [],
+          participants: [],
+        },
+      },
+      { upsert: true, new: true }
     );
 
-    if (activePrompt) {
-      const { start, end } = getCurrentWeekWindowUTC(now);
-
-      // idem: avoid duplicates for this prompt and this exact window
-      let createdChallenge = await Challenge.findOne({
-        prompt_id: activePrompt._id,
-        start_date: start,
-        end_date: end,
-      });
-
-      if (!createdChallenge) {
-        createdChallenge = await Challenge.create({
-          prompt_id: activePrompt._id,
-          start_date: start,
-          end_date: end,
-        });
-      }
-
-      // populate to keep the same shape as above
-      activeChallenge = await Challenge.findById(createdChallenge._id).populate(
-        {
-          path: "prompt_id",
-          select: "title description rules is_active",
-        }
-      );
-    }
+    // re-population for consistent response shape
+    activeChallenge = await Challenge.findById(created._id).populate({
+      path: "prompt_id",
+      select: "title description rules is_active",
+    });
   }
 
+  // 4) Safety
   if (!activeChallenge || !activeChallenge.prompt_id) {
     return { success: true, prompt: null };
   }
 
+  // 5) Sync flags: only this prompt must be active
   const p = activeChallenge.prompt_id;
+  await syncPromptActiveFlag(p._id);
 
-  await syncPromptActiveFlag(p._id); // Flags synchronization
-
-  // Shape as in accept.creterias. Dates come from Challenge.
-
+  // 6) Response
   return {
     success: true,
     prompt: {
@@ -102,7 +118,7 @@ async function runPromptSync(now = new Date()) {
       rule: p.rules,
       start_date: activeChallenge.start_date.toISOString(),
       end_date: activeChallenge.end_date.toISOString(),
-      is_active: true, // this prompt is attached to the current challlenge
+      is_active: true,
     },
   };
 }

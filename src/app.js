@@ -53,7 +53,7 @@ app.use("/api/prompts", promptRouter);
 if (process.env.ENABLE_CRON === "true") {
   //once a week: Sunday 00:05 UTC  -> 5 0 * * 0 ("* * * * *" - for test only)
   cron.schedule(
-    "5 0 * * 0",
+    "* * * * *",
     async () => {
       try {
         const result = await runPromptSync();
