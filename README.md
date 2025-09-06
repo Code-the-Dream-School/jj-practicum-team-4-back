@@ -31,7 +31,7 @@ To start the application, run:
 
 npm run dev
 
-Then open http://localhost:5000 in your browser.
+Then open http://localhost:8000 in your browser.
 
 --------------------------------------------------------
 # Back-End Repo for Node/React Practicum
