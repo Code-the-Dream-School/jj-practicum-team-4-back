@@ -16,7 +16,7 @@ const isLoggedIn = (req, res, next) => {
             try {
                 const decoded = jwt.verify(token, process.env.JWT_SECRET)
                 req.user = {
-                    id: decoded._id,
+                    id: decoded.userId,
                     first_name: decoded.firstName, 
                     fullName: decoded.fullName
                 }
