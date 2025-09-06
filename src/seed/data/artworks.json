@@ -1,0 +1,303 @@
+[
+  {
+    "key": "a1",
+    "user_key": "u_alice",
+    "prompt_key": "p1",
+    "title": "Platform Sketch",
+    "description": "Graphite study of commuters waiting at the platform.",
+    "image_url": "https://picsum.photos/id/200/800/600",
+    "media_tag": "Tag8",
+    "like_counter": 1
+  },
+  {
+    "key": "a2",
+    "user_key": "u_bob",
+    "prompt_key": "p1",
+    "title": "Bus Stop Huddle",
+    "description": "Loose ink lines capturing a crowded bus stop.",
+    "image_url": "https://picsum.photos/id/201/800/600",
+    "media_tag": "Tag9",
+    "like_counter": 2
+  },
+  {
+    "key": "a3",
+    "user_key": "u_chris",
+    "prompt_key": "p1",
+    "title": "Coffee to Go",
+    "description": "Quick marker sketch of a barista rush.",
+    "image_url": "https://picsum.photos/id/202/800/600",
+    "media_tag": "Tag10",
+    "like_counter": 1
+  },
+  {
+    "key": "a4",
+    "user_key": "u_dana",
+    "prompt_key": "p1",
+    "title": "Morning Tracks",
+    "description": "Watercolor wash of rails in hazy light.",
+    "image_url": "https://picsum.photos/id/203/800/600",
+    "media_tag": "Tag1",
+    "like_counter": 1
+  },
+  {
+    "key": "a5",
+    "user_key": "u_eli",
+    "prompt_key": "p1",
+    "title": "Ticket Gate",
+    "description": "Charcoal tones of gate shadows.",
+    "image_url": "https://picsum.photos/id/204/800/600",
+    "media_tag": "Tag2",
+    "like_counter": 1
+  },
+  {
+    "key": "a6",
+    "user_key": "u_fay",
+    "prompt_key": "p1",
+    "title": "Rushing Feet",
+    "description": "Motion blur lines and shoe details.",
+    "image_url": "https://picsum.photos/id/205/800/600",
+    "media_tag": "Tag3",
+    "like_counter": 1
+  },
+  {
+    "key": "a7",
+    "user_key": "u_gus",
+    "prompt_key": "p1",
+    "title": "Crosswalk Rhythm",
+    "description": "Digital brushwork suggesting step patterns.",
+    "image_url": "https://picsum.photos/id/206/800/600",
+    "media_tag": "Tag4",
+    "like_counter": 1
+  },
+  {
+    "key": "a8",
+    "user_key": "u_ivy",
+    "prompt_key": "p1",
+    "title": "Subway Car",
+    "description": "Pen lines and hatching inside a car.",
+    "image_url": "https://picsum.photos/id/207/800/600",
+    "media_tag": "Tag5",
+    "like_counter": 1
+  },
+  {
+    "key": "a9",
+    "user_key": "u_bob",
+    "prompt_key": "p1",
+    "title": "Newspaper Fold",
+    "description": "Graphite contrasts on folded paper.",
+    "image_url": "https://picsum.photos/id/208/800/600",
+    "media_tag": "Tag6",
+    "like_counter": 1
+  },
+  {
+    "key": "a10",
+    "user_key": "u_chris",
+    "prompt_key": "p1",
+    "title": "Rainy Commute",
+    "description": "Wet sidewalks and umbrellas.",
+    "image_url": "https://picsum.photos/id/209/800/600",
+    "media_tag": "Tag7",
+    "like_counter": 6
+  },
+  {
+    "key": "a11",
+    "user_key": "u_dana",
+    "prompt_key": "p1",
+    "title": "Turnstile Clicks",
+    "description": "Ink + marker mixed gestures.",
+    "image_url": "https://picsum.photos/id/210/800/600",
+    "media_tag": "Tag8",
+    "like_counter": 1
+  },
+  {
+    "key": "a12",
+    "user_key": "u_eli",
+    "prompt_key": "p1",
+    "title": "Bridge Walk",
+    "description": "Long steps across the morning bridge.",
+    "image_url": "https://picsum.photos/id/211/800/600",
+    "media_tag": "Tag9",
+    "like_counter": 5
+  },
+  {
+    "key": "a13",
+    "user_key": "u_fay",
+    "prompt_key": "p1",
+    "title": "Bike Lane",
+    "description": "Pastel strokes of cyclists.",
+    "image_url": "https://picsum.photos/id/212/800/600",
+    "media_tag": "Tag10",
+    "like_counter": 3
+  },
+  {
+    "key": "a14",
+    "user_key": "u_gus",
+    "prompt_key": "p1",
+    "title": "Morning Window",
+    "description": "Digital study of sun glare on glass.",
+    "image_url": "https://picsum.photos/id/213/800/600",
+    "media_tag": "Tag1",
+    "like_counter": 0
+  },
+  {
+    "key": "a15",
+    "user_key": "u_ivy",
+    "prompt_key": "p1",
+    "title": "Escalator Flow",
+    "description": "Ink silhouettes riding upward.",
+    "image_url": "https://picsum.photos/id/214/800/600",
+    "media_tag": "Tag2",
+    "like_counter": 2
+  },
+
+  {
+    "key": "a16",
+    "user_key": "u_alice",
+    "prompt_key": "p2",
+    "title": "Blue Dawn",
+    "description": "Single hue ultramarine landscape.",
+    "image_url": "https://picsum.photos/id/220/800/600",
+    "media_tag": "Tag3",
+    "like_counter": 6
+  },
+  {
+    "key": "a17",
+    "user_key": "u_bob",
+    "prompt_key": "p2",
+    "title": "Indigo Portrait",
+    "description": "Profile in deep indigo values.",
+    "image_url": "https://picsum.photos/id/221/800/600",
+    "media_tag": "Tag4",
+    "like_counter": 1
+  },
+  {
+    "key": "a18",
+    "user_key": "u_chris",
+    "prompt_key": "p2",
+    "title": "Cobalt City",
+    "description": "Monochrome skyline with mist.",
+    "image_url": "https://picsum.photos/id/222/800/600",
+    "media_tag": "Tag5",
+    "like_counter": 1
+  },
+  {
+    "key": "a19",
+    "user_key": "u_dana",
+    "prompt_key": "p2",
+    "title": "Cerulean Sea",
+    "description": "Seascape with limited values only.",
+    "image_url": "https://picsum.photos/id/223/800/600",
+    "media_tag": "Tag6",
+    "like_counter": 2
+  },
+  {
+    "key": "a20",
+    "user_key": "u_eli",
+    "prompt_key": "p2",
+    "title": "Prussian Study",
+    "description": "Planes and edges in prussian blue.",
+    "image_url": "https://picsum.photos/id/224/800/600",
+    "media_tag": "Tag7",
+    "like_counter": 1
+  },
+  {
+    "key": "a21",
+    "user_key": "u_fay",
+    "prompt_key": "p2",
+    "title": "Azure Still Life",
+    "description": "Bottle and cloth in one hue.",
+    "image_url": "https://picsum.photos/id/225/800/600",
+    "media_tag": "Tag8",
+    "like_counter": 2
+  },
+  {
+    "key": "a22",
+    "user_key": "u_gus",
+    "prompt_key": "p2",
+    "title": "Midnight Alley",
+    "description": "High contrast monochrome alley.",
+    "image_url": "https://picsum.photos/id/226/800/600",
+    "media_tag": "Tag9",
+    "like_counter": 1
+  },
+  {
+    "key": "a23",
+    "user_key": "u_ivy",
+    "prompt_key": "p2",
+    "title": "Sapphire Shapes",
+    "description": "Geometric composition in tints/shades.",
+    "image_url": "https://picsum.photos/id/227/800/600",
+    "media_tag": "Tag10",
+    "like_counter": 1
+  },
+  {
+    "key": "a24",
+    "user_key": "u_chris",
+    "prompt_key": "p2",
+    "title": "Moonlight Field",
+    "description": "Soft gradients by pressure only.",
+    "image_url": "https://picsum.photos/id/228/800/600",
+    "media_tag": "Tag1",
+    "like_counter": 1
+  },
+  {
+    "key": "a25",
+    "user_key": "u_dana",
+    "prompt_key": "p2",
+    "title": "Blue Orchard",
+    "description": "Tree masses in three value steps.",
+    "image_url": "https://picsum.photos/id/229/800/600",
+    "media_tag": "Tag2",
+    "like_counter": 1
+  },
+  {
+    "key": "a26",
+    "user_key": "u_eli",
+    "prompt_key": "p2",
+    "title": "Cyan Horizon",
+    "description": "Horizontal bands of light/dark.",
+    "image_url": "https://picsum.photos/id/230/800/600",
+    "media_tag": "Tag3",
+    "like_counter": 3
+  },
+  {
+    "key": "a27",
+    "user_key": "u_fay",
+    "prompt_key": "p2",
+    "title": "Blue Vase",
+    "description": "Negative-space vase study.",
+    "image_url": "https://picsum.photos/id/231/800/600",
+    "media_tag": "Tag4",
+    "like_counter": 1
+  },
+  {
+    "key": "a28",
+    "user_key": "u_gus",
+    "prompt_key": "p2",
+    "title": "Cobalt Bridge",
+    "description": "Single-color bridge perspective.",
+    "image_url": "https://picsum.photos/id/232/800/600",
+    "media_tag": "Tag5",
+    "like_counter": 1
+  },
+  {
+    "key": "a29",
+    "user_key": "u_ivy",
+    "prompt_key": "p2",
+    "title": "Deep Blue Room",
+    "description": "Interior planes, value blocks only.",
+    "image_url": "https://picsum.photos/id/233/800/600",
+    "media_tag": "Tag6",
+    "like_counter": 5
+  },
+  {
+    "key": "a30",
+    "user_key": "u_alice",
+    "prompt_key": "p2",
+    "title": "Sapphire Sketch",
+    "description": "Loose sketch of night reflections in blue.",
+    "image_url": "https://picsum.photos/id/234/800/600",
+    "media_tag": "Tag7",
+    "like_counter": 0
+  }
+]
