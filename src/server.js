@@ -1,4 +1,4 @@
-const { PORT = 8000 } = process.env;
+const PORT = process.env.PORT || 8000
 const app = require("./app");
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.SESSION_SECRET) {
