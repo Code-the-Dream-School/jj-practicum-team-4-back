@@ -1,47 +1,14 @@
 const mongoose = require("mongoose");
 const Artwork = require("../../models/Artwork");
-const Prompt = require("../../models/Prompt");
-
-const searchArtworks = (req, res) => {
-  // Public; Query: q?, media_tag?, prompt_id?, page?, limit?, sort?(recent|likes) // default sort=recent
-  // TODO: search & paginate
-  return res.status(501).json({ message: "Not implemented: GET /api/artwork" });
-};
-
-const createArtwork = (req, res) => {
-  // Auth required; multipart/form-data (file + fields)
-  // Enforce challenge window, file type/size, title/description lengths
-  // 201 { created artwork } | 400 | 401 | 403 | 413 | 500
-  return res
-    .status(501)
-    .json({ message: "Not implemented: POST /api/artwork" });
-};
-
-const getArtworkById = (req, res) => {
-  // Public; Path: :id
-  // 200 { artwork } | 404 | 500
-  return res
-    .status(501)
-    .json({ message: "Not implemented: GET /api/artwork/:id" });
-};
-
-const deleteArtwork = (req, res) => {
-  // Owner or Admin; Path: :id
-  // 204 | 401 | 403 | 404 | 500
-  return res
-    .status(501)
-    .json({ message: "Not implemented: DELETE /api/artwork/:id" });
-};
+const Prompt = require("../../models/Prompt"); // проверь путь к модели Prompt
 
 // GET /api/prompts/:id/artworks
-// Public endpoint that will return artworks for a given prompt
-
+// Public endpoint per docs: q?, media_tag?, page?, limit?, sort? (recent|likes, default=likes)
 async function listArtworksByPrompt(req, res) {
   try {
     const { id } = req.params;
 
-    // validate ObjectId
-
+    // 1) validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         error: "Bad Request",
@@ -50,8 +17,7 @@ async function listArtworksByPrompt(req, res) {
       });
     }
 
-    // ensure prompt exists
-
+    // 2) ensure prompt exists (404, как в AC)
     const promptExists = await Prompt.exists({ _id: id });
     if (!promptExists) {
       return res.status(404).json({
@@ -60,14 +26,12 @@ async function listArtworksByPrompt(req, res) {
       });
     }
 
-    // parse and validate entry
-
+    // 3) parse & validate query
     const rawPage = req.query.page;
     const rawLimit = req.query.limit;
-    const rawSort = req.query.sort; // 'recent' | 'likes'
+    const rawSort = req.query.sort;              // 'recent' | 'likes'
     const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
-    const media =
-      typeof req.query.media_tag === "string" ? req.query.media_tag.trim() : "";
+    const media = typeof req.query.media_tag === "string" ? req.query.media_tag.trim() : "";
 
     const page = rawPage ? parseInt(rawPage, 10) : 1;
     const limit = rawLimit ? parseInt(rawLimit, 10) : 20;
@@ -84,17 +48,14 @@ async function listArtworksByPrompt(req, res) {
       return res.status(400).json({
         error: "Bad Request",
         code: "BAD_REQUEST",
-        details: {
-          field: "limit",
-          reason: "Must be integer between 1 and 100",
-        },
+        details: { field: "limit", reason: "Must be integer between 1 and 100" },
       });
     }
 
     let sort = "likes";
     if (rawSort === "recent" || rawSort === "likes") {
       sort = rawSort;
-    } else if (rawSort !== undefined) {
+    } else if (rawSort != null) {
       return res.status(400).json({
         error: "Bad Request",
         code: "BAD_REQUEST",
@@ -102,8 +63,7 @@ async function listArtworksByPrompt(req, res) {
       });
     }
 
-    // build filter
-
+    // 4) build filter
     const filter = { prompt_id: id };
     if (media) filter.media_tag = media;
     if (q) {
@@ -112,30 +72,26 @@ async function listArtworksByPrompt(req, res) {
       filter.$or = [{ title: rx }, { description: rx }];
     }
 
-    // sort spec // tie-breaker: ensure stable order when values are equal
-
+    // 5) sort spec
     const sortSpec =
       sort === "recent"
         ? { createdAt: -1, _id: -1 }
         : { like_counter: -1, createdAt: -1, _id: -1 };
 
-    // query and pagination
-
+    // 6) query + pagination
     const skip = (page - 1) * limit;
 
     const [total, docs] = await Promise.all([
-      //it's faster to use promise
-      Artwork.countDocuments(filter), // need to count artworks after filter and return correct total to count pages
+      Artwork.countDocuments(filter),
       Artwork.find(filter)
-        .sort(sortSpec) // by rule: recent -> createdAr desc, likes -> like_counter desc
-        .skip(skip) // skipping needed number of documents to be at the needed page
+        .sort(sortSpec)
+        .skip(skip)
         .limit(limit)
-        .select(
-          "title image_url media_tag like_counter user_id prompt_id createdAt"
-        ) // requesting from DB only needed fields
-        .populate({ path: "user_id", select: "username" }), // Double check with team are we still using username?
+        .select("title image_url media_tag like_counter user_id prompt_id createdAt")
+        .populate({ path: "user_id", select: "username" }),
     ]);
-    // map to response
+
+    // 7) map to response contract
     const items = docs.map((a) => ({
       id: String(a._id),
       title: a.title,
@@ -158,11 +114,3 @@ async function listArtworksByPrompt(req, res) {
     });
   }
 }
-
-module.exports = {
-  searchArtworks,
-  createArtwork,
-  getArtworkById,
-  deleteArtwork,
-  listArtworksByPrompt,
-};
