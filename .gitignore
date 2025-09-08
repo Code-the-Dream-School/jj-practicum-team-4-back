@@ -20,4 +20,4 @@ node_modules/
 
 .env
 
-test/test-mongo.js
+/tests
