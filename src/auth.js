@@ -5,12 +5,13 @@ const User = require('../models/User.js')
 passport.use(new GoogleStrategy({ 
       clientID: process.env.GOOGLE_CLIENT_ID, 
       clientSecret: process.env.GOOGLE_CLIENT_SECRET, 
-      callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:5000/google/callback",
+      callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:8000/auth/google/callback",
       passReqToCallback: true, 
     },
     async function(request, accessToken, refreshToken, profile, done) { 
       try {
         let user = await User.findOne({ googleId: profile.id }) 
+        //let user = await User.findOne({ $or: [{ googleId: profile.id }, { email: profile.email }] })
         if (!user) {
           user = await User.create({
             googleId: profile.id,
@@ -41,12 +42,3 @@ passport.deserializeUser(async (id, done) => {
 
 
 
-
-//Notes:
-//https://stackoverflow.com/questions/27637609/understanding-passport-serialize-deserialize
-//https://www.passportjs.org/packages/passport-google-oauth2/
-//https://youtu.be/Q0a0594tOrc?si=AFlsMSJBn0dcj0Kj
-//https://developers.google.com/identity/protocols/oauth2
-//https://www.passportjs.org/concepts/delegated-authorization/
-//https://expressjs.com/en/resources/middleware/session.html ---- Info on cookies: May Be An Issue In The Future
-//https://mongoosejs.com/docs/5.x/docs/deprecations.html

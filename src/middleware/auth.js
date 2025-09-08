@@ -1,20 +1,38 @@
 const passport = require('passport')
+const jwt = require('jsonwebtoken')
+const User = require('../../models/User')
 
 const isLoggedIn = (req, res, next) => {
     try {
         if (req.user) {
             return next()
         }
-        res.status(401).send({ error: 'User Not Authenticated' })
+        const authHeader = req.headers.authorization
+            if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                return res.status(401).json({ error: 'User Not Authenticated' })
+            }
+
+        const token = authHeader.split(' ')[1]
+            try {
+                const decoded = jwt.verify(token, process.env.JWT_SECRET)
+                req.user = {
+                    id: decoded.userId,
+                    first_name: decoded.firstName, 
+                    fullName: decoded.fullName
+                }
+                next()
+            } catch (error) {
+                return res.status(401).json({ error: 'Invalid Token'})
+        }
     } catch (error) {
-        res.status(500).send({ error: 'Internal Issue Authenticating User' })
+        res.status(500).json({ error: 'Internal Issue Authenticating User' })
     }
 }
 
 const googleAuth = passport.authenticate('google', { scope: ['email', 'profile']})
 
 const googleCallback = passport.authenticate('google', {
-    successRedirect: '/protected',
+    successRedirect: '/auth/protected',
     failureRedirect: '/auth/google',
 })
 
