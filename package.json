@@ -1,8 +1,8 @@
 {
-  "name": "bb-practicum-team-1-back",
+  "name": "jj-practicum-team-4-back",
   "version": "1.0.0",
-  "description": "Back-End Repo for Team 1 of Baboon/Bald Eagle Practicum",
-  "main": "app.js",
+  "description": "Back-End Repo for Team 4 of JJ Practicum",
+  "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
     "seed": "node src/seed/seed.js"
@@ -18,6 +18,7 @@
     "mongodb": "^6.18.0",
     "mongoose": "^8.17.2",
     "morgan": "^1.10.1",
+    "node-cron": "^4.2.1",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0"
