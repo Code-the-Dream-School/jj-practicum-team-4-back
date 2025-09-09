@@ -133,7 +133,7 @@ async function listArtworksByPrompt(req, res) {
         .select(
           "title image_url media_tag like_counter user_id prompt_id createdAt"
         ) // requesting from DB only needed fields
-        .populate({ path: "user_id", select: "username" }), // Double check with team are we still using username?
+        .populate({ path: "user_id", select: "first_name" }),
     ]);
     // map to response
     const items = docs.map((a) => ({
@@ -143,8 +143,8 @@ async function listArtworksByPrompt(req, res) {
       media_tag: a.media_tag ?? null,
       like_counter: a.like_counter ?? 0,
       user: a.user_id
-        ? { id: String(a.user_id._id), username: a.user_id.username }
-        : { id: null, username: null },
+        ? { id: String(a.user_id._id), first_name: a.user_id.first_name }
+        : { id: null, first_name: null },
       prompt_id: String(a.prompt_id),
       createdAt: a.createdAt?.toISOString?.() ?? null,
     }));
