@@ -81,7 +81,7 @@ UserSchema.methods.getName = function () {
 
 UserSchema.methods.createJWT = function () {
     const fullName = this.getName()
-    return jwt.sign({userId: this._id, fullName, firstName: this.first_name}, process.env.JWT_SECRET, {
+    return jwt.sign({userId: this._id, fullName, firstName: this.first_name, lastName: this.last_name}, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_LIFETIME,
     })
 }

@@ -18,6 +18,7 @@ const isLoggedIn = (req, res, next) => {
             req.user = {
                 id: decoded.userId,
                 first_name: decoded.firstName,
+                last_name: decoded.lastName,
                 fullName: decoded.fullName,
                 picture: decoded.picture
             }
@@ -35,18 +36,18 @@ const googleAuth = passport.authenticate('google', { scope: ['email', 'profile']
 const googleCallback = (req, res, next) => {
     passport.authenticate('google', (err, user) => {
         if (err) {
-            return next(err);
+            return next(err)
         }
         if (!user) {
-            return res.redirect('/auth/google');
+            return res.redirect('/auth/google')
         }
         req.logIn(user, (err) => {
             if (err) {
-                return next(err);
+                return next(err)
             }
             // Create JWT token for the user
-            const token = user.createJWT();
-            const fullName = user.getName();
+            const token = user.createJWT()
+            const fullName = user.getName()
 
             // Encode user data to pass in URL params
             const userData = encodeURIComponent(JSON.stringify({ 
@@ -55,12 +56,12 @@ const googleCallback = (req, res, next) => {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 email: user.email
-            }));
+            }))
 
             // Redirect to frontend homepage with token and user data
-            return res.redirect(`${process.env.FRONTEND_URL}/gallery?auth=success&token=${token}&userData=${userData}`);
-        });
-    })(req, res, next);
+            return res.redirect(`${process.env.FRONTEND_URL}/gallery?auth=success&token=${token}&userData=${userData}`)
+        })
+    })(req, res, next)
 }
 
 module.exports = {

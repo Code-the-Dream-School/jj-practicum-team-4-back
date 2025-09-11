@@ -104,14 +104,14 @@ const getCurrentUser = (req, res) => {
                 email: req.user.email,
                 picture: req.user.picture
             };
-            return res.status(200).json({ user: userData });
+            return res.status(200).json({ user: userData })
         }
-        return res.status(401).json({ error: 'User not authenticated' });
+        return res.status(401).json({ error: 'User not authenticated' })
     } catch (error) {
-        console.error('Error fetching current user:', error);
-        return res.status(500).json({ error: 'Server error while fetching user data' });
+        console.error('Error fetching current user:', error)
+        return res.status(500).json({ error: 'Server error while fetching user data' })
     }
-};
+}
 
 module.exports = {
     signinLink,
