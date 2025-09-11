@@ -53,7 +53,15 @@ const login = async (req, res) => {
     }
     const fullName = user.getName()
     const token = user.createJWT()
-    return res.status(200).json({ user: {fullName}, token })
+    return res.status(200).json({ 
+      user: {
+        fullName,
+        picture: user.picture,
+        first_name: user.first_name,
+        last_name: user.last_name
+      }, 
+      token 
+    })
 }
 
 
@@ -62,7 +70,15 @@ const register = async (req, res) => {
         const user = await User.create({ ...req.body })
         const fullName = user.getName()
         const token = user.createJWT()
-        res.status(201).json({ user: { fullName }, token })
+        res.status(201).json({ 
+          user: {
+            fullName,
+            picture: user.picture,
+            first_name: user.first_name,
+            last_name: user.last_name
+          }, 
+          token 
+        })
     } catch (error) {
         if (error.name === 'ValidationError') {
             return res.status(400).json({ error: 'Registration failed: Missing or invalid required fields.' })
@@ -76,10 +92,32 @@ const register = async (req, res) => {
     }
 }
 
+const getCurrentUser = (req, res) => {
+    try {
+        // If user is authenticated via session or token
+        if (req.user) {
+            const userData = {
+                id: req.user._id,
+                first_name: req.user.first_name,
+                last_name: req.user.last_name,
+                fullName: req.user.first_name + ' ' + req.user.last_name,
+                email: req.user.email,
+                picture: req.user.picture
+            };
+            return res.status(200).json({ user: userData });
+        }
+        return res.status(401).json({ error: 'User not authenticated' });
+    } catch (error) {
+        console.error('Error fetching current user:', error);
+        return res.status(500).json({ error: 'Server error while fetching user data' });
+    }
+};
+
 module.exports = {
     signinLink,
     protectedPage,
     logoutUser,
     login,
     register,
+    getCurrentUser
 }

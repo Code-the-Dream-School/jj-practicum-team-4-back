@@ -11,14 +11,45 @@ passport.use(new GoogleStrategy({
     async function(request, accessToken, refreshToken, profile, done) { 
         try {
             let user = await User.findOne({ googleId: profile.id })
+            
+            // Extract profile picture URL - Google typically provides it in photos array
+            const pictureUrl = profile.photos && profile.photos.length > 0 
+                ? profile.photos[0].value 
+                : (profile.picture || null);
+                
+            console.log('Extracted picture URL:', pictureUrl);
+
+            // If user exists but doesn't have a picture URL, update it
+            if (user && !user.picture && pictureUrl) {
+                console.log('Updating existing user with new picture URL');
+                user.picture = pictureUrl;
+                await user.save();
+            }
 
             if (!user) {
                 try {
+                    // Log the Google profile object to debug picture URL structure
+                    console.log('Google profile data:', {
+                        id: profile.id,
+                        name: profile.displayName,
+                        email: profile.email,
+                        pictureObj: profile.photos,
+                        rawPicture: profile.picture
+                    });
+                    
+                    // Extract profile picture URL - Google typically provides it in photos array
+                    const pictureUrl = profile.photos && profile.photos.length > 0 
+                        ? profile.photos[0].value 
+                        : (profile.picture || null);
+                        
+                    console.log('Extracted picture URL:', pictureUrl);
+                    
                     user = await User.create({
                         googleId: profile.id,
                         first_name: profile.name.givenName,
                         last_name: profile.name.familyName,
                         email: profile.email,
+                        picture: pictureUrl
                     })
                 } catch (createErr) {
                     if (createErr.code === 11000) {
