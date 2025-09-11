@@ -20,7 +20,11 @@ const isLoggedIn = (req, res, next) => {
                 first_name: decoded.firstName,
                 last_name: decoded.lastName,
                 fullName: decoded.fullName,
-                picture: decoded.picture
+                picture: decoded.profilePic,
+                email: decoded.email,
+                social_handle: decoded.socialMedia,
+                is_admin: decoded.admin,
+                createdAt: decoded.createdDate 
             }
             next()
         } catch (error) {

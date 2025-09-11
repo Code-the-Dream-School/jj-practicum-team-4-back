@@ -15,15 +15,15 @@ passport.use(new GoogleStrategy({
             // Extract profile picture URL - Google typically provides it in photos array
             const pictureUrl = profile.photos && profile.photos.length > 0 
                 ? profile.photos[0].value 
-                : (profile.picture || null);
+                : (profile.picture || null)
                 
-            console.log('Extracted picture URL:', pictureUrl);
+            console.log('Extracted picture URL:', pictureUrl)
 
             // If user exists but doesn't have a picture URL, update it
             if (user && !user.picture && pictureUrl) {
-                console.log('Updating existing user with new picture URL');
-                user.picture = pictureUrl;
-                await user.save();
+                console.log('Updating existing user with new picture URL')
+                user.picture = pictureUrl
+                await user.save()
             }
 
             if (!user) {
@@ -35,14 +35,14 @@ passport.use(new GoogleStrategy({
                         email: profile.email,
                         pictureObj: profile.photos,
                         rawPicture: profile.picture
-                    });
+                    })
                     
                     // Extract profile picture URL - Google typically provides it in photos array
                     const pictureUrl = profile.photos && profile.photos.length > 0 
                         ? profile.photos[0].value 
-                        : (profile.picture || null);
+                        : (profile.picture || null)
                         
-                    console.log('Extracted picture URL:', pictureUrl);
+                    console.log('Extracted picture URL:', pictureUrl)
                     
                     user = await User.create({
                         googleId: profile.id,
@@ -62,7 +62,7 @@ passport.use(new GoogleStrategy({
                     return done(new Error('Failed to create user account from Google profile.'), null)
                 }
             }
-            return done(null, user);
+            return done(null, user)
         } catch (err) {
             console.error('Google OAuth general error:', err)
             if (err.name === 'MongooseError') {

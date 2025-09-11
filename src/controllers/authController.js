@@ -102,8 +102,11 @@ const getCurrentUser = (req, res) => {
                 last_name: req.user.last_name,
                 fullName: req.user.first_name + ' ' + req.user.last_name,
                 email: req.user.email,
-                picture: req.user.picture
-            };
+                picture: req.user.picture,
+                social_handle: req.user.social_handle,
+                is_admin: req.user.is_admin,
+                createdAt: req.user.createdAt
+            }
             return res.status(200).json({ user: userData })
         }
         return res.status(401).json({ error: 'User not authenticated' })
