@@ -45,7 +45,7 @@ mainController.getHome = async (_req, res) => {
       .select(
         "title image_url media_tag like_counter user_id prompt_id createdAt"
       )
-      .populate({ path: "user_id", select: "username image" });
+      .populate({ path: "user_id", select: "first_name image" });
 
     const recent_artworks = docs.map((a) => ({
       id: String(a._id),
@@ -54,8 +54,8 @@ mainController.getHome = async (_req, res) => {
       media_tag: a.media_tag ?? null,
       like_counter: a.like_counter ?? 0,
       user: a.user_id
-        ? { id: String(a.user_id._id), username: a.user_id.username ?? null }
-        : { id: null, username: null },
+        ? { id: String(a.user_id._id), first_name: a.user_id.first_name ?? null }
+        : { id: null, first_name: null },
       prompt_id: a.prompt_id ? String(a.prompt_id) : null,
       createdAt: a.createdAt,
     }));

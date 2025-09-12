@@ -52,11 +52,13 @@ app.use(favicon(__dirname + "/public/favicon.ico"));
 const mainRouter = require("./routes/mainRouter.js");
 const authRouter = require("./routes/authRouter.js");
 const promptRouter = require("./routes/promptRouter");
+const challengeRouter = require('./routes/challengeRouter.js');
 
 //Routes
 app.use("/api", mainRouter);
 app.use("/api/prompts", promptRouter);
 app.use("/auth", authRouter);
+app.use("/api/challenge", challengeRouter);
 
 //CRON scheduler
 
