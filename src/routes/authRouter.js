@@ -12,6 +12,7 @@ const {
   logoutUser,
   login,
   register,
+  getCurrentUser
 } = require("../controllers/authController");
 
 router.get("/", signinLink);
@@ -21,5 +22,6 @@ router.get("/protected", isLoggedIn, protectedPage);
 router.get("/logout", logoutUser);
 router.post("/login", login);
 router.post("/register", register);
+router.get('/user', isLoggedIn, getCurrentUser);
 
 module.exports = router;

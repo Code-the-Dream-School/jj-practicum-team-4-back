@@ -53,6 +53,10 @@ const UserSchema = new mongoose.Schema({
         type: String, 
         trim: true,
     },
+    picture: {
+        type: String,
+        trim: true,
+    },
     is_admin: {
         type: Boolean,
         default: false, 
@@ -77,7 +81,7 @@ UserSchema.methods.getName = function () {
 
 UserSchema.methods.createJWT = function () {
     const fullName = this.getName()
-    return jwt.sign({userId: this._id, fullName, firstName: this.first_name}, process.env.JWT_SECRET, {
+    return jwt.sign({userId: this._id, fullName, firstName: this.first_name, lastName: this.last_name, profilePic: this.picture, email: this.email, socialMedia: this.social_handle, admin: this.is_admin, createdDate: this.createdAt}, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_LIFETIME,
     })
 }
