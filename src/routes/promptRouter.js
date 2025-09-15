@@ -4,6 +4,7 @@ const {
   getActivePrompt,
   createPrompt,
   updatePrompt,
+  deletePrompt,
 } = require("../controllers/promptController");
 const { listArtworksByPrompt } = require("../controllers/artworkController");
 const { isLoggedIn } = require("../middleware/auth");
@@ -21,5 +22,7 @@ router.post("/", isLoggedIn, requireAdmin, createPrompt);
 //Update weekly challenge
 router.patch("/:id", isLoggedIn, requireAdmin, updatePrompt);
 
+//Delete weekly challenge
+router.delete("/:id", isLoggedIn, requireAdmin, deletePrompt);
 
 module.exports = router;

@@ -437,14 +437,42 @@ async function updatePrompt(req, res) {
   }
 }
 
-const deletePrompt = (req, res) => {
-  // Admin only; Path: :id
-  // TODO: delete prompt (and associated challenge)
-  // 204 No Content
-  return res
-    .status(501)
-    .json({ message: "Not implemented: DELETE /api/prompt/:id" });
-};
+// DELETE /api/prompts/:id (Auth=Yes, Admin=Yes)
+async function deletePrompt(req, res) {
+  try {
+    const { id } = req.params;
+
+    // 400 — wrong id format
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: { field: "id" },
+      });
+    }
+
+    // looking for prompt
+    const promptDoc = await Prompt.findById(id).select("_id is_active");
+    if (!promptDoc) {
+      return res.status(404).json({ error: "Not Found", code: "NOT_FOUND" });
+    }
+
+    // deleting connected challenges if any
+    await Challenge.deleteMany({ prompt_id: promptDoc._id });
+
+    // deleting prompt
+    await Prompt.deleteOne({ _id: promptDoc._id });
+
+    // err 204 
+    return res.status(204).send();
+  } catch (err) {
+    console.error("[DELETE /api/prompts/:id] error:", err);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      code: "INTERNAL_ERROR",
+    });
+  }
+}
 
 const listPromptArtworks = (req, res) => {
   // Public; Path: :id; Query: q?, media_tag?, page?, limit?, sort?(recent|likes)
