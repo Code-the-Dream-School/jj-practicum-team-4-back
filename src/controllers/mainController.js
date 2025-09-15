@@ -84,11 +84,6 @@ mainController.getAbout = (_req, res) => {
   return res.status(200).json({
     project: "ArtHive",
     description: "Weekly art prompts with community submissions and favorites.",
-    links: {
-      repo_back: null,
-      repo_front: null,
-      docs: null,
-    },
   });
 };
 
