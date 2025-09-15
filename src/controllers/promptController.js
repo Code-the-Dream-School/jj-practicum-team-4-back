@@ -456,6 +456,15 @@ async function deletePrompt(req, res) {
     if (!promptDoc) {
       return res.status(404).json({ error: "Not Found", code: "NOT_FOUND" });
     }
+    // blocking the deletion of an actie prompt
+    if (promptDoc.is_active) {
+      return res.status(409).json({
+        error: "Conflict",
+        code: "ACTIVE_PROMPT_DELETE_FORBIDDEN",
+        message:
+          "Cannot delete an active prompt. Deactivate or switch active prompt first.",
+      });
+    }
 
     // deleting connected challenges if any
     await Challenge.deleteMany({ prompt_id: promptDoc._id });
@@ -463,7 +472,7 @@ async function deletePrompt(req, res) {
     // deleting prompt
     await Prompt.deleteOne({ _id: promptDoc._id });
 
-    // err 204 
+    // err 204
     return res.status(204).send();
   } catch (err) {
     console.error("[DELETE /api/prompts/:id] error:", err);
