@@ -2,6 +2,7 @@
 
 const Prompt = require("../../models/Prompt");
 const Challenge = require("../../models/Challenge");
+const mongoose = require("mongoose");
 
 // keep only one active prompt flag true
 //turns off all others and enables the given on flag
@@ -265,13 +266,176 @@ async function createPrompt(req, res) {
   }
 }
 
-const updatePrompt = (req, res) => {
-  // Admin only; Path: :id
-  // Body: partial update of fields, incl. toggling is_active and adjusting challenge window
-  return res
-    .status(501)
-    .json({ message: "Not implemented: PATCH /api/prompt/:id" });
-};
+async function updatePrompt(req, res) {
+  // PATCH /api/prompts/:id (Auth=Yes, Admin=Yes)
+  // Edits prompt fields; if is_active=true, ensures it's the only active prompt.
+  // If challenge dates are provided, BOTH start_date and end_date are required.
+  // On date conflict, the prompt is moved into the existing window.
+
+  try {
+    const { id } = req.params;
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: { field: "id" },
+      });
+    }
+
+    const { title, description, rules, is_active, challenge } = req.body || {};
+
+    //  Basic field validation (only if provided)
+    if (
+      title !== undefined &&
+      (typeof title !== "string" || title.length === 0 || title.length > 120)
+    ) {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: { field: "title length must be 1..120" },
+      });
+    }
+    if (
+      description !== undefined &&
+      (typeof description !== "string" || description.length > 2000)
+    ) {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: { field: "description length must be ≤ 2000" },
+      });
+    }
+    if (rules !== undefined && typeof rules !== "string") {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: { field: "rules must be string" },
+      });
+    }
+    if (is_active !== undefined && typeof is_active !== "boolean") {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: { field: "is_active must be boolean" },
+      });
+    }
+
+    // Load prompt
+    let promptDoc = await Prompt.findById(id);
+    if (!promptDoc) {
+      return res.status(404).json({ error: "Not Found", code: "NOT_FOUND" });
+    }
+
+    // Update prompt fields (except is_active=true which is handled separately)
+    const toSet = {};
+    if (title !== undefined) toSet.title = title;
+    if (description !== undefined) toSet.description = description;
+    if (rules !== undefined) toSet.rules = rules;
+    if (is_active === false) toSet.is_active = false; // just turn it off if explicitly false
+
+    if (Object.keys(toSet).length) {
+      promptDoc = await Prompt.findByIdAndUpdate(
+        id,
+        { $set: toSet },
+        { new: true }
+      );
+    }
+
+    //If is_active=true , ensure single active prompt using the helper
+    if (is_active === true) {
+      await syncPromptActiveFlag(promptDoc._id);
+      promptDoc.is_active = true; // reflect in response
+    }
+
+    //Challenge window update (optional)
+    // We require BOTH start_date and end_date if "challenge" object is present
+    let challengeDoc = await Challenge.findOne({
+      prompt_id: promptDoc._id,
+    }).select("_id start_date end_date prompt_id");
+
+    if (challenge !== undefined) {
+      const hasStart = typeof challenge?.start_date === "string";
+      const hasEnd = typeof challenge?.end_date === "string";
+      if (!hasStart || !hasEnd) {
+        return res.status(400).json({
+          error: "Bad Request",
+          code: "BAD_REQUEST",
+          details: {
+            field:
+              "challenge.start_date and challenge.end_date are both required",
+          },
+        });
+      }
+
+      const nextStart = new Date(challenge.start_date);
+      const nextEnd = new Date(challenge.end_date);
+      if (isNaN(nextStart.getTime()) || isNaN(nextEnd.getTime())) {
+        return res.status(400).json({
+          error: "Bad Request",
+          code: "BAD_REQUEST",
+          details: { field: "Invalid ISO dates" },
+        });
+      }
+
+      // If there's already a challenge with the same window, move this prompt into it.
+      const conflict = await Challenge.findOne({
+        start_date: nextStart,
+        end_date: nextEnd,
+      }).select("_id start_date end_date prompt_id");
+
+      if (conflict) {
+        const moved = await Challenge.findByIdAndUpdate(
+          conflict._id,
+          { $set: { prompt_id: promptDoc._id } },
+          { new: true }
+        ).select("_id start_date end_date");
+
+        // Remove old window if it was different
+        if (challengeDoc && String(challengeDoc._id) !== String(moved._id)) {
+          await Challenge.findByIdAndDelete(challengeDoc._id);
+        }
+        challengeDoc = moved;
+      } else if (challengeDoc) {
+        // Update existing window dates
+        challengeDoc = await Challenge.findByIdAndUpdate(
+          challengeDoc._id,
+          { $set: { start_date: nextStart, end_date: nextEnd } },
+          { new: true }
+        ).select("_id start_date end_date");
+      } else {
+        // Create a new window for this prompt
+        challengeDoc = await Challenge.create({
+          prompt_id: promptDoc._id,
+          start_date: nextStart,
+          end_date: nextEnd,
+        });
+      }
+    }
+
+    // Response
+    return res.status(200).json({
+      prompt: {
+        id: String(promptDoc._id),
+        title: promptDoc.title,
+        description: promptDoc.description ?? null,
+        rules: promptDoc.rules ?? null,
+        is_active: !!promptDoc.is_active,
+      },
+      challenge: challengeDoc
+        ? {
+            id: String(challengeDoc._id),
+            start_date: challengeDoc.start_date,
+            end_date: challengeDoc.end_date,
+          }
+        : null,
+    });
+  } catch (err) {
+    console.error("updatePrompt error:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", code: "INTERNAL_SERVER_ERROR" });
+  }
+}
 
 const deletePrompt = (req, res) => {
   // Admin only; Path: :id
