@@ -1,13 +1,20 @@
-// src/routes/promptRouter.js
 const express = require("express");
 const router = express.Router();
-const { getActivePrompt } = require("../controllers/promptController");
+const {
+  getActivePrompt,
+  createPrompt,
+} = require("../controllers/promptController");
 const { listArtworksByPrompt } = require("../controllers/artworkController");
+const { isLoggedIn } = require("../middleware/auth");
+const { requireAdmin } = require("../middleware/requireAdmin");
 
 // GET /api/prompts/active
 router.get("/active", getActivePrompt);
 
 // GET /api/prompts/:id/artworks
 router.get("/:id/artworks", listArtworksByPrompt);
+
+//Create weekly challenge (Admin only)
+router.post("/", isLoggedIn, requireAdmin, createPrompt);
 
 module.exports = router;

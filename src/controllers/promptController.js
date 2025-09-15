@@ -78,8 +78,9 @@ async function runPromptSync(now = new Date()) {
     }
     if (!promptIdToUse) {
       // if there are no prompts at all in DB
-      return { success: true, prompt: null };
+      return { message: "No active challenge" };
     }
+
     const created = await Challenge.findOneAndUpdate(
       { start_date: start, end_date: end },
       {
@@ -101,7 +102,7 @@ async function runPromptSync(now = new Date()) {
 
   // 4) Safety
   if (!activeChallenge || !activeChallenge.prompt_id) {
-    return { success: true, prompt: null };
+    return { message: "No active challenge" };
   }
 
   // 5) Sync flags: only this prompt must be active
@@ -110,16 +111,17 @@ async function runPromptSync(now = new Date()) {
 
   // 6) Response
   return {
-    success: true,
     prompt: {
-      
-      _id: p._id,
+      id: String(p._id),
       title: p.title,
-      description: p.description,
-      rule: p.rules,
-      start_date: activeChallenge.start_date.toISOString(),
-      end_date: activeChallenge.end_date.toISOString(),
+      description: p.description ?? null,
+      rules: p.rules ?? null,
       is_active: true,
+    },
+    challenge: {
+      id: String(activeChallenge._id),
+      start_date: activeChallenge.start_date,
+      end_date: activeChallenge.end_date,
     },
   };
 }
@@ -142,12 +144,126 @@ const listAllPrompts = (req, res) => {
     .json({ message: "Not implemented: GET /api/prompt/all" });
 };
 
-const createPrompt = (req, res) => {
+async function createPrompt(req, res) {
   // Admin only
   // Body: { title, description, rules, challenge: { start_date, end_date } }
   // TODO: validate, create prompt + challenge, default is_active=false
-  return res.status(501).json({ message: "Not implemented: POST /api/prompt" });
-};
+  try {
+    const { title, description, rules, challenge } = req.body || {};
+
+    // required fields
+    if (
+      !title ||
+      !description ||
+      !challenge?.start_date ||
+      !challenge?.end_date
+    ) {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: {
+          required: [
+            "title",
+            "description",
+            "challenge.start_date",
+            "challenge.end_date",
+          ],
+        },
+      });
+    }
+    // lengths
+    if (typeof title !== "string" || title.length > 120) {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: { field: "title length must be ≤ 120" },
+      });
+    }
+    if (typeof description !== "string" || description.length > 2000) {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: { field: "description length must be ≤ 2000" },
+      });
+    }
+
+    // dates
+    const start = new Date(challenge.start_date);
+    const end = new Date(challenge.end_date);
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res.status(400).json({
+        error: "Bad Request",
+        code: "BAD_REQUEST",
+        details: { field: "Invalid ISO dates" },
+      });
+    }
+
+    // 1) Create Prompt (keep is_active default=false; activation handled elsewhere)
+    const prompt = await Prompt.create({
+      title,
+      description,
+      rules: typeof rules === "string" ? rules : undefined,
+    });
+
+    // 2) Create or update Challenge for this window
+    const exist = await Challenge.findOne({
+      start_date: start,
+      end_date: end,
+    }).select("_id start_date end_date");
+    if (exist) {
+      // overwrite prompt_id on existing challenge
+      const updated = await Challenge.findByIdAndUpdate(
+        exist._id,
+        { $set: { prompt_id: prompt._id } },
+        { new: true }
+      ).select("_id start_date end_date");
+
+      return res.status(200).json({
+        prompt: {
+          id: String(prompt._id),
+          title: prompt.title,
+          description: prompt.description ?? null,
+          rules: prompt.rules ?? null,
+          is_active:
+            typeof prompt.is_active === "boolean" ? prompt.is_active : false,
+        },
+        challenge: {
+          id: String(updated._id),
+          start_date: updated.start_date,
+          end_date: updated.end_date,
+        },
+      });
+    } else {
+      // create new challenge document
+      const created = await Challenge.create({
+        prompt_id: prompt._id,
+        start_date: start,
+        end_date: end,
+      });
+
+      return res.status(201).json({
+        prompt: {
+          id: String(prompt._id),
+          title: prompt.title,
+          description: prompt.description ?? null,
+          rules: prompt.rules ?? null,
+          is_active:
+            typeof prompt.is_active === "boolean" ? prompt.is_active : false,
+        },
+        challenge: {
+          id: String(created._id),
+          start_date: created.start_date,
+          end_date: created.end_date,
+        },
+      });
+    }
+  } catch (err) {
+    console.error("createPrompt error:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", code: "INTERNAL_SERVER_ERROR" });
+  }
+}
 
 const updatePrompt = (req, res) => {
   // Admin only; Path: :id

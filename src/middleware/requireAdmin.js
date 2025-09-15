@@ -1,6 +1,6 @@
 const User = require("../../models/User");
 
-module.exports = async function requireAdmin(req, res, next) {
+async function requireAdmin(req, res, next) {
   try {
     if (!req.user?.id)
       return res
@@ -20,4 +20,6 @@ module.exports = async function requireAdmin(req, res, next) {
       .status(500)
       .json({ error: "Internal Server Error", code: "INTERNAL_SERVER_ERROR" });
   }
-};
+}
+
+module.exports = { requireAdmin };
