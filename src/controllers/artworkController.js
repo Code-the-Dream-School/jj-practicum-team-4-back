@@ -157,9 +157,6 @@ const deleteArtwork = async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." })
   }
 }
-
-
-
 // GET /api/prompts/:id/artworks
 // Public endpoint that will return artworks for a given prompt
 
