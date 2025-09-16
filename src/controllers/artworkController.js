@@ -67,8 +67,14 @@ const createArtwork = async (req, res) => {
     if (!req.user) return res.status(401).json({ message: "Unauthorized, please try logging in." })
 
     const { title, description, media_tag, prompt_id } = req.body
-    if (!title || title.length > 100)
+    if (!title?.trim()) {
+      return res.status(400).json({ message: "A title is required." })
+    }
+
+    if (title.trim().length > 100) {
       return res.status(400).json({ message: "The title is too long. Please try again." })
+    }
+    
     if (description && description.length > 500)
       return res.status(400).json({ message: "The description is too long. Please try again." })
 
