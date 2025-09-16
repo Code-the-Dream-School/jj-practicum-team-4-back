@@ -25,13 +25,38 @@ const getArtworkById = (req, res) => {
     .json({ message: "Not implemented: GET /api/artwork/:id" });
 };
 
-const deleteArtwork = (req, res) => {
   // Owner or Admin; Path: :id
   // 204 | 401 | 403 | 404 | 500
-  return res
-    .status(501)
-    .json({ message: "Not implemented: DELETE /api/artwork/:id" });
-};
+async function deleteArtwork(req, res) {
+  try {
+    // Ensure only admin can delete
+    if (!req.user || req.user.is_admin !== true) {
+      return res.status(403).json({ error: "Admin only" });
+    }
+
+    const { id } = req.params;
+
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid artwork id" });
+    }
+
+    // Find artwork by id
+    const doc = await Artwork.findById(id);
+    if (!doc) {
+      return res.status(404).json({ error: "Artwork not found" });
+    }
+
+    // Delete artwork (optionally cascade delete likes/comments or file)
+    await doc.deleteOne();
+
+    return res.status(200).json({ deleted: true, id: String(id) });
+  } catch (err) {
+    console.error("deleteArtwork error:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 
 // GET /api/prompts/:id/artworks
 // Public endpoint that will return artworks for a given prompt
