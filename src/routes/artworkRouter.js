@@ -1,14 +1,13 @@
-
 const express = require("express")
 const router = express.Router()
 
 const { isLoggedIn } = require('../middleware/auth')
-const uploadArtwork = require("../middleware/uploadArtwork")
+const { uploadSingleImage } = require("../controllers/imageController")
 const { searchArtworks, createArtwork, getArtworkById, deleteArtwork } = require("../controllers/artworkController")
 
-//Artwork Functionality
+// Artwork functionality
 router.get("/", searchArtworks)
-router.post("/", isLoggedIn, uploadArtwork.single("file"), createArtwork)
+router.post("/", isLoggedIn, uploadSingleImage, createArtwork)
 router.get("/:id", getArtworkById)
 router.delete("/:id", isLoggedIn, deleteArtwork)
 

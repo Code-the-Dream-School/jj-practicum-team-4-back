@@ -1,9 +1,8 @@
 const mongoose = require("mongoose")
-const fs = require("fs")
-const path = require("path")
 const User = require("../../models/User")
 const Artwork = require("../../models/Artwork")
 const Prompt = require("../../models/Prompt")
+const { uploadFileAndGetUrl } = require("./imageController")
   
 
 const parsePagination = (req) => {
@@ -77,22 +76,21 @@ const createArtwork = async (req, res) => {
 
     const fileTypes = ["image/jpeg", "image/png", "image/gif"] 
     if (!fileTypes.includes(req.file.mimetype)) { 
-      fs.unlinkSync(req.file.path) 
       return res.status(400).json({ message: "This is an invalid file type. Please only upload jpeg, png, or gif." })
     }
 
     if (req.file.size > 5 * 1024 * 1024) {
-      fs.unlinkSync(req.file.path)
       return res.status(413).json({ message: "Your file is too large." })
     }
 
+    const imageUrl = await uploadFileAndGetUrl(req.file)
     const newArtwork = await Artwork.create({
       user_id: req.user.id,
       title,
       description,
       media_tag,
       prompt_id,
-      image_url: `/uploads/${req.file.filename}`, 
+      image_url: imageUrl, 
     })
 
     await User.findByIdAndUpdate(req.user._id, {
@@ -140,11 +138,6 @@ const deleteArtwork = async (req, res) => {
 
     if (!req.user.is_admin && artworkOwnerId !== currentUserId) {
       return res.status(403).json({ message: "You do not have permission to delete this post." })
-    }
-
-    if (artwork.image_url) {
-      const filePath = path.join(__dirname, "../public", artwork.image_url)
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
     }
 
     await artwork.deleteOne()
