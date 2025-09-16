@@ -6,7 +6,7 @@ const {
   updatePrompt,
   deletePrompt,
 } = require("../controllers/promptController");
-const { listArtworksByPrompt } = require("../controllers/artworkController");
+const { listArtworksByPrompt } = require("../controllers/promptController");
 const { isLoggedIn } = require("../middleware/auth");
 const { requireAdmin } = require("../middleware/requireAdmin");
 

@@ -22,6 +22,6 @@ router.get("/protected", isLoggedIn, protectedPage);
 router.get("/logout", logoutUser);
 router.post("/login", login);
 router.post("/register", register);
-router.get('/user', isLoggedIn, getCurrentUser);
+router.get("/user", isLoggedIn, getCurrentUser);
 
 module.exports = router;
