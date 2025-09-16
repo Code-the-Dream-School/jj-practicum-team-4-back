@@ -6,6 +6,13 @@ const Challenge = require("../../models/Challenge");
 // keep only one active prompt flag true
 //turns off all others and enables the given on flag
 
+// helper to normalize dates to the midnight UTC
+function toUtcMidnight(d) {
+  const x = new Date(d);
+  x.setUTCHours(0, 0, 0, 0);
+  return x;
+}
+
 async function syncPromptActiveFlag(activePromptId) {
   //clear flag at all other prompts
   await Prompt.updateMany(
@@ -48,11 +55,13 @@ function getCurrentWeekWindowUTC(now = new Date()) {
 async function runPromptSync(now = new Date()) {
   // 1) Week window (UTC)
   const { start, end } = getCurrentWeekWindowUTC(now);
+  const normStart = toUtcMidnight(start);
+  const normEnd = toUtcMidnight(end);
 
   // 2) Find challenge covering this week
   let activeChallenge = await Challenge.findOne({
-    start_date: start,
-    end_date: end,
+    start_date: normStart,
+    end_date: normEnd,
   }).populate({
     path: "prompt_id",
     select: "title description rules is_active",
@@ -82,15 +91,18 @@ async function runPromptSync(now = new Date()) {
     }
 
     const created = await Challenge.findOneAndUpdate(
-      { start_date: start, end_date: end },
+      { start_date: normStart, end_date: normEnd },
       {
         $setOnInsert: {
+           start_date: normStart, 
+           end_date: normEnd, 
           prompt_id: promptIdToUse,
           artworks: [],
           participants: [],
         },
+        $set: { prompt_id: promptIdToUse },
       },
-      { upsert: true, new: true }
+      { new: true, upsert: true, setDefaultsOnInsert: true }
     );
 
     // re-population for consistent response shape
@@ -188,8 +200,8 @@ async function createPrompt(req, res) {
     }
 
     // dates
-    const start = new Date(challenge.start_date);
-    const end = new Date(challenge.end_date);
+    const start = toUtcMidnight(challenge.start_date);
+    const end = toUtcMidnight(challenge.end_date);
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return res.status(400).json({
         error: "Bad Request",
@@ -298,4 +310,5 @@ module.exports = {
   updatePrompt,
   deletePrompt,
   listPromptArtworks,
+  toUtcMidnight,
 };
