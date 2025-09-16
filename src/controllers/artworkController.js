@@ -38,5 +38,4 @@ module.exports = {
   createArtwork,
   getArtworkById,
   deleteArtwork,
-  listArtworksByPrompt,
 };

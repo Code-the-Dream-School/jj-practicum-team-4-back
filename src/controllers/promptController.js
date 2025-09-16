@@ -3,6 +3,7 @@
 const Prompt = require("../../models/Prompt");
 const Challenge = require("../../models/Challenge");
 const mongoose = require("mongoose");
+const Artwork = require("../../models/Artwork");
 
 // keep only one active prompt flag true
 //turns off all others and enables the given on flag
