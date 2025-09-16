@@ -73,3 +73,35 @@ exports.getImage = async (req, res) => {
     res.redirect(url) 
   })
 }
+
+exports.uploadFileAndGetUrl = (file) => {
+  return new Promise((resolve, reject) => {
+    if (!file) return reject(new Error("No file uploaded."))
+
+    const fileBuffer = file.buffer
+    const { Readable } = require("stream")
+    const fileStream = new Readable({ read() {} })
+    fileStream.push(fileBuffer)
+    fileStream.push(null)
+
+    const destinationPath = Date.now() + "-" + file.originalname
+    const writeStream = bucket.file(destinationPath).createWriteStream({
+      resumable: false,
+      contentType: file.mimetype,
+    })
+
+    writeStream.on("error", reject)
+
+    writeStream.on("finish", async () => {
+      try {
+        await bucket.file(destinationPath).makePublic()
+        const imageUrl = `https://storage.googleapis.com/${process.env.BUCKET_NAME}/${destinationPath}`
+        resolve(imageUrl)
+      } catch (err) {
+        reject(err)
+      }
+    })
+
+    fileStream.pipe(writeStream)
+  })
+}
