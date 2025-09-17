@@ -1,11 +1,15 @@
-const express = require("express");
-const router = express.Router();
+const express = require("express")
+const router = express.Router()
 
-const { isLoggedIn } = require("../middleware/auth");
+const { isLoggedIn } = require('../middleware/auth')
 const { requireAdmin } = require("../middleware/requireAdmin");
-const { deleteArtwork } = require("../controllers/artworkController");
+const { uploadSingleImage } = require("../controllers/imageController")
+const { searchArtworks, createArtwork, getArtworkById, deleteArtwork } = require("../controllers/artworkController")
 
-// Admin-only delete
-router.delete("/:id", isLoggedIn, requireAdmin, deleteArtwork);
+// Artwork functionality
+router.get("/", searchArtworks)
+router.post("/", isLoggedIn, uploadSingleImage, createArtwork)
+router.get("/:id", getArtworkById)
+router.delete("/:id", isLoggedIn, requireAdmin, deleteArtwork)
 
-module.exports = router;
+module.exports = router

@@ -37,6 +37,7 @@ const ArtworkSchema = new mongoose.Schema({
       enum: ['Tag1','Tag2','Tag3','Tag4','Tag5','Tag6','Tag7','Tag8', 'Tag9','Tag10'],
       default: 'Tag1',
     },
+    voters: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
  },
   { timestamps: true }
 )
@@ -48,8 +49,5 @@ module.exports = mongoose.model('Artwork', ArtworkSchema)
 
 
 
-
-//Notes:
-//https://mongoosejs.com/docs/timestamps.html
 
 
