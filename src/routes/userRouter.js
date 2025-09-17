@@ -13,6 +13,8 @@ router.patch("/me", isLoggedIn, userController.updateMe);
 // GET /api/user/:id → public profile
 router.get("/:id", userController.getPublicProfile);
 
+// PATCH /api/user/me → update profile
+router.patch("/me", isLoggedIn, userController.updateMe);
 // PATCH api/user/:id. -> Auth + Admin: update another user's admin flag
 router.patch("/:id", isLoggedIn, requireAdmin, adminUpdateUser);
 
