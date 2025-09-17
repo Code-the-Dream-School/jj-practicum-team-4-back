@@ -30,7 +30,7 @@ const searchArtworks = async (req, res) => {
         return res.status(400).json({
           error: "Bad Request",
           code: "BAD_REQUEST",
-          details: { field: "sort", reason: "Supported values: recent | likes | title | media_tag" },
+          details: { field: "sort", reason: "Supported values: recent | oldest | likes | title | media_tag" },
         })
       }
       sortField = rawSort
