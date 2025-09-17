@@ -629,7 +629,6 @@ module.exports = {
   createPrompt,
   updatePrompt,
   deletePrompt,
-  listPromptArtworks,
   toUtcMidnight,
   listArtworksByPrompt,
 };
