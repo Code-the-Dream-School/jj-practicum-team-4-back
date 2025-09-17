@@ -3,8 +3,10 @@ const router = express.Router();
 const {
   getActivePrompt,
   createPrompt,
+  updatePrompt,
+  deletePrompt,
 } = require("../controllers/promptController");
-const { listArtworksByPrompt } = require("../controllers/artworkController");
+const { listArtworksByPrompt } = require("../controllers/promptController");
 const { isLoggedIn } = require("../middleware/auth");
 const { requireAdmin } = require("../middleware/requireAdmin");
 
@@ -16,5 +18,11 @@ router.get("/:id/artworks", listArtworksByPrompt);
 
 //Create weekly challenge (Admin only)
 router.post("/", isLoggedIn, requireAdmin, createPrompt);
+
+//Update weekly challenge
+router.patch("/:id", isLoggedIn, requireAdmin, updatePrompt);
+
+//Delete weekly challenge
+router.delete("/:id", isLoggedIn, requireAdmin, deletePrompt);
 
 module.exports = router;
