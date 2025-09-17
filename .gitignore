@@ -21,3 +21,5 @@ node_modules/
 .env
 
 /tests
+
+config/service-account.json

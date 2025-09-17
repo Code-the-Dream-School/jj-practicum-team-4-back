@@ -51,7 +51,9 @@ app.use(favicon(__dirname + "/public/favicon.ico"));
 //Routers
 const mainRouter = require("./routes/mainRouter.js");
 const authRouter = require("./routes/authRouter.js");
-const promptRouter = require("./routes/promptRouter");
+const promptRouter = require("./routes/promptRouter.js");
+const userRouter = require("./routes/userRouter.js");
+const imageRouter = require("./routes/imageRouter");
 const artworkRouter = require("./routes/artworkRouter.js");
 
 //Routes
@@ -59,6 +61,8 @@ app.use("/api", mainRouter);
 app.use("/api/prompts", promptRouter);
 app.use("/api/artwork", artworkRouter);
 app.use("/auth", authRouter);
+app.use('/images', imageRouter);
+app.use("/api/user", userRouter);
 
 //CRON scheduler
 
