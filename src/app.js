@@ -53,11 +53,13 @@ const mainRouter = require("./routes/mainRouter.js");
 const authRouter = require("./routes/authRouter.js");
 const promptRouter = require("./routes/promptRouter.js");
 const userRouter = require("./routes/userRouter.js");
+const imageRouter = require("./routes/imageRouter");
 
 //Routes
 app.use("/api", mainRouter);
 app.use("/api/prompts", promptRouter);
 app.use("/auth", authRouter);
+app.use('/images', imageRouter);
 app.use("/api/user", userRouter);
 
 //CRON scheduler
