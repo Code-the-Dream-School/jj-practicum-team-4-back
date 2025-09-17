@@ -56,7 +56,7 @@ const searchArtworks = async (req, res) => {
         .skip(skip)
         .limit(limit)
         .select('title image_url media_tag like_counter user_id prompt_id createdAt')
-        .populate({ path: 'user_id', select: 'first_name' }), // вы используете first_name
+        .populate({ path: 'user_id', select: 'first_name' }),
     ]);
 
     const items = docs.map((a) => ({
@@ -121,7 +121,7 @@ async function deleteArtwork(req, res) {
       return res.status(404).json({ error: "Artwork not found" });
     }
 
-    // Delete artwork (optionally cascade delete likes/comments or file)
+    // Delete artwork
     await doc.deleteOne();
 
     return res.status(200).json({ deleted: true, id: String(id) });
