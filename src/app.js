@@ -58,7 +58,7 @@ const artworkRouter = require("./routes/artworkRouter");
 app.use("/api", mainRouter);
 app.use("/api/prompts", promptRouter);
 app.use("/auth", authRouter);
-app.use("/api/srtworks", artworkRouter);
+app.use("/api/artworks", artworkRouter);
 
 //CRON scheduler
 
