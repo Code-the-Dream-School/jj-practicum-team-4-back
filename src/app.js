@@ -56,10 +56,12 @@ const challengeRouter = require("./routes/challengeRouter.js");
 const userRouter = require("./routes/userRouter.js");
 const artworkRouter = require("./routes/artworkRouter");
 const imageRouter = require("./routes/imageRouter");
+const artworkRouter = require("./routes/artworkRouter.js");
 
 //Routes
 app.use("/api", mainRouter);
 app.use("/api/prompts", promptRouter);
+app.use("/api/artwork", artworkRouter);
 app.use("/auth", authRouter);
 app.use("/api/challenge", challengeRouter);
 app.use('/images', imageRouter);
