@@ -147,7 +147,10 @@ const deleteArtwork = async (req, res) => {
     }
 
     await artwork.deleteOne()
-
+    await User.findByIdAndUpdate(artworkOwnerId, {
+      $pull: { userArtworks: artwork._id }
+    })
+    
     res.status(204).send()
   } catch (error) {
     console.error(error)
