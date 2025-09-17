@@ -5,10 +5,17 @@ const { isLoggedIn } = require('../middleware/auth')
 const { uploadSingleImage } = require("../controllers/imageController")
 const { searchArtworks, createArtwork, getArtworkById, deleteArtwork } = require("../controllers/artworkController")
 
-// Artwork functionality
+// Artwork Functionality
 router.get("/", searchArtworks)
 router.post("/", isLoggedIn, uploadSingleImage, createArtwork)
 router.get("/:id", getArtworkById)
 router.delete("/:id", isLoggedIn, deleteArtwork)
+
+// Like Functionality
+
+router.get("/:id/likes", getArtworkLikes)
+router.post("/:id/likes", isLoggedIn, addArtworkLike)
+router.delete("/:id/likes", isLoggedIn, removeArtworkLike)
+
 
 module.exports = router
