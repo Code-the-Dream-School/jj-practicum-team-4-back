@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^7.17.1",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
@@ -20,6 +21,7 @@
     "mongodb": "^6.18.0",
     "mongoose": "^8.17.2",
     "morgan": "^1.10.1",
+    "multer": "^2.0.2",
     "node-cron": "^4.2.1",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
