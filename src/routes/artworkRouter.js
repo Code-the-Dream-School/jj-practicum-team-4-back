@@ -1,5 +1,5 @@
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
 const { isLoggedIn } = require('../middleware/auth')
 const { uploadSingleImage } = require("../controllers/imageController")
@@ -17,4 +17,4 @@ router.post("/:id/likes", isLoggedIn, addArtworkLike)
 router.delete("/:id/likes", isLoggedIn, removeArtworkLike)
 
 
-module.exports = router
+module.exports = router;
