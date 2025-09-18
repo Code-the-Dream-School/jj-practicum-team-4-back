@@ -188,7 +188,112 @@ const deleteArtwork = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
-};
+}
+
+
+const getArtworkLikes = async (req, res) => {
+  try {
+    const { id } = req.params
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid MongoDB object ID." })
+    }
+
+    const artwork = await Artwork.findById(id)
+    if (!artwork) {
+      return res.status(404).json({ message: "Artwork was not found." })
+    }
+
+    const userId = req.user ? req.user.id : null
+    const liked_by_me = userId ? artwork.voters.includes(userId) : false
+
+    res.status(200).json({
+      like_counter: artwork.like_counter || 0,
+      liked_by_me,
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Server error. Please try again later." })
+  }
+}
+
+
+const addArtworkLike = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized user. Please log in." })
+    }
+
+    const { id } = req.params
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid MongoDB object ID." })
+    }
+
+    const artwork = await Artwork.findById(id)
+    if (!artwork) {
+      return res.status(404).json({ message: "Artwork was not found." })
+    }
+
+    const userId = req.user.id
+    if (artwork.voters.includes(userId)) {
+      return res.status(409).json({ message: "You already liked this artwork." })
+    }
+
+    artwork.voters.push(userId)
+    artwork.like_counter = (artwork.like_counter || 0) + 1
+    await artwork.save()
+
+    res.status(200).json({
+      like_counter: artwork.like_counter,
+      liked_by_me: true,
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Server error. Please try again later." })
+  }
+}
+
+
+// Remove Like
+const removeArtworkLike = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized user. Please log in." })
+    }
+
+    const { id } = req.params
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid MongoDB object ID." })
+    }
+
+    const artwork = await Artwork.findById(id)
+    if (!artwork) {
+      return res.status(404).json({ message: "Artwork not found." })
+    }
+
+    const userId = req.user.id
+    if (!artwork.voters.includes(userId)) {
+      return res.status(404).json({ message: "You haven't liked this artwork." })
+    }
+
+    artwork.voters = artwork.voters.filter(
+      (voterId) => voterId.toString() !== userId.toString()
+    )
+    artwork.like_counter = Math.max((artwork.like_counter || 1) - 1, 0)
+    
+    await artwork.save()
+
+    res.status(200).json({
+      like_counter: artwork.like_counter,
+      liked_by_me: false,
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Server error. Please try again later." })
+  }
+}
+
+
+
 // GET /api/prompts/:id/artworks
 // Public endpoint that will return artworks for a given prompt
 
@@ -321,4 +426,7 @@ module.exports = {
   getArtworkById,
   deleteArtwork,
   listArtworksByPrompt,
-};
+  getArtworkLikes,
+  addArtworkLike,
+  removeArtworkLike,
+}
