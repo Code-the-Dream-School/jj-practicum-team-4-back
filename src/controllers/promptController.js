@@ -96,8 +96,8 @@ async function runPromptSync(now = new Date()) {
       { start_date: normStart, end_date: normEnd },
       {
         $setOnInsert: {
-           start_date: normStart, 
-           end_date: normEnd, 
+          start_date: normStart,
+          end_date: normEnd,
           prompt_id: promptIdToUse,
           artworks: [],
           participants: [],
@@ -150,12 +150,44 @@ const getActivePrompt = async (req, res, next) => {
   }
 };
 
-const listAllPrompts = (req, res) => {
+const listAllPrompts = async (req, res, next) => {
   // Admin only; supports pagination (page, limit)
   // TODO: return paginated list of prompts
-  return res
-    .status(501)
-    .json({ message: "Not implemented: GET /api/prompt/all" });
+  // GET /api/prompts/all
+
+  try {
+    // query params: page, limit
+    const page = Math.max(parseInt(req.query.page || "1", 10), 1);
+    const limitRaw = parseInt(req.query.limit || "20", 10);
+    const limit = Math.min(Math.max(limitRaw, 1), 100);
+    const skip = (page - 1) * limit;
+
+    const [total, docs] = await Promise.all([
+      Prompt.countDocuments({}),
+      Prompt.find({}, "title description rules is_active createdAt")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+    ]);
+    const items = docs.map((d) => ({
+      id: String(d._id),
+      title: d.title,
+      description: d.description,
+      rules: d.rules,
+      is_active: !!d.is_active,
+      createdAt: d.createdAt,
+    }));
+
+    return res.status(200).json({
+      items,
+      page,
+      limit,
+      total,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 async function createPrompt(req, res) {
@@ -277,7 +309,7 @@ async function createPrompt(req, res) {
       .status(500)
       .json({ error: "Internal Server Error", code: "INTERNAL_SERVER_ERROR" });
   }
-} 
+}
 
 async function updatePrompt(req, res) {
   // PATCH /api/prompts/:id (Auth=Yes, Admin=Yes)
