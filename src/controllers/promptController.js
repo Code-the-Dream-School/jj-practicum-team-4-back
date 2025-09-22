@@ -164,7 +164,7 @@ const getActivePrompt = async (req, res, next) => {
 };
 
 const listAllPrompts = async (req, res, next) => {
-  // Admin only; supports pagination (page, limit)
+  // Supports pagination (page, limit)
   // TODO: return paginated list of prompts
   // GET /api/prompts/all
 
