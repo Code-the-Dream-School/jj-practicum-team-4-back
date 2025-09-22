@@ -92,28 +92,40 @@ async function runPromptSync(now = new Date()) {
       return { message: "No active challenge" };
     }
 
-    const created = await Challenge.findOneAndUpdate(
-      { start_date: normStart, end_date: normEnd },
-      {
-        $setOnInsert: {
-          start_date: normStart,
-          end_date: normEnd,
-          prompt_id: promptIdToUse,
-          artworks: [],
-          participants: [],
-        },
-        $set: { prompt_id: promptIdToUse },
-      },
-      { new: true, upsert: true, setDefaultsOnInsert: true }
-    );
+    let win = await Challenge.findOne({
+      start_date: normStart,
+      end_date: normEnd,
+    }).select("_id prompt_id start_date end_date");
 
-    // re-population for consistent response shape
-    activeChallenge = await Challenge.findById(created._id).populate({
-      path: "prompt_id",
-      select: "title description rules is_active",
-    });
+    if (!win) {
+      // creating new recordwith  prompt_id one time (witout $setOnInsert + $set)
+      const created = await Challenge.create({
+        start_date: normStart,
+        end_date: normEnd,
+        prompt_id: promptIdToUse,
+        artworks: [],
+        participants: [],
+      });
+      activeChallenge = await Challenge.findById(created._id).populate({
+        path: "prompt_id",
+        select: "title description rules is_active",
+      });
+    } else {
+      // challenge window exists, so updating the prompt_id only
+      if (!win.prompt_id || String(win.prompt_id) !== String(promptIdToUse)) {
+        await Challenge.findByIdAndUpdate(
+          win._id,
+          { $set: { prompt_id: promptIdToUse } },
+          { new: false }
+        );
+      }
+      // re-population for consistent response shape
+      activeChallenge = await Challenge.findById(win._id).populate({
+        path: "prompt_id",
+        select: "title description rules is_active",
+      });
+    }
   }
-
   // 4) Safety
   if (!activeChallenge || !activeChallenge.prompt_id) {
     return { message: "No active challenge" };
@@ -121,8 +133,9 @@ async function runPromptSync(now = new Date()) {
 
   // 5) Sync flags: only this prompt must be active
   const p = activeChallenge.prompt_id;
-  await syncPromptActiveFlag(p._id);
-
+  if (!p.is_active) {
+    await syncPromptActiveFlag(p._id);
+  }
   // 6) Response
   return {
     prompt: {
