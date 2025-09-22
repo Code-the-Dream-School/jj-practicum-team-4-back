@@ -104,6 +104,7 @@ npm install
     - @google-cloud/storage
     - multer
     - jsonwebtoken
+    - bcrypt
 
 ## Application Set-Up Instructions
 
