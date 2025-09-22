@@ -5,13 +5,17 @@ const {
   createPrompt,
   updatePrompt,
   deletePrompt,
+  listAllPrompts,
+  listArtworksByPrompt,
 } = require("../controllers/promptController");
-const { listArtworksByPrompt } = require("../controllers/promptController");
 const { isLoggedIn } = require("../middleware/auth");
 const { requireAdmin } = require("../middleware/requireAdmin");
 
 // GET /api/prompts/active
 router.get("/active", getActivePrompt);
+
+//GET /api/prompts/all (Admin only)
+router.get("/all", isLoggedIn, requireAdmin, listAllPrompts);
 
 // GET /api/prompts/:id/artworks
 router.get("/:id/artworks", listArtworksByPrompt);
