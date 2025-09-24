@@ -2,11 +2,6 @@
 
 ArtHive is a creative platform designed for artists of all levels who want inspiration and community. Each week, the app sends out a unique art challenge to spark creativity and encourage participation. Artists can upload their work, explore others’ submissions, and engage with the community through feedback and support. By combining structured challenges with a collaborative space, ArtHive helps artists stay motivated, improve their skills, and share their creativity with a wider audience.
 
-### Draft 1: README.md
-
-- Initial project description and core idea.
-- Basic prerequisites, dependencies, and set-up.
-
 ## Prerequisites
 
 Before running this project, please make sure your development environment has the following installed:
@@ -15,10 +10,55 @@ Before running this project, please make sure your development environment has t
 - MongoDB : https://www.mongodb.com/try/download/community
 - Git : https://git-scm.com/downloads
 
+#### Google Console & Google Storage Set-Up
 ##### Google Console Set-Up
-- Please make sure you have a developer account with Google (https://developers.google.com/). 
-- Once you do, redirect to Google Cloud Console (https://console.cloud.google.com) and create a Google Cloud Hub for your application (https://cloud.google.com/hub/docs/setup-cloud-hub). 
-- During the application set-up, Google will give you the application GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET. You will need to make sure you have the same GOOGLE_CALLBACK_URL between Google Cloud Console and the Google Cloud Hub.
+1. Developer Account
+- Make sure you have a Google Developer account: https://developers.google.com/.
+2. Google Cloud Console
+- Go to Google Cloud Console.
+- Create or select a project for your application.
+3. Set Up OAuth Credentials
+- Navigate to APIs & Services.
+- Click on the Credentials tab and then on Create credentials.
+- Select OAuth client ID. 
+- For the Application type, choose Web application.
+- Enter your application name.
+- Add your authorized redirect URI (this must match exactly with your GOOGLE_CALLBACK_URL in your application).
+4. Get Client ID and Secret
+- Once created, Google will give you a GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.
+- These valus go into your environment variables (.env file).
+
+##### Google Image Upload 
+1. Google Cloud Console
+- Go to Google Cloud Console.
+- Navigate to Cloud Storage and then click on Buckets.
+2. Google Cloud Storage and Buckets
+- In Buckets, click on Create.
+- Choose a permanent name for the Bucket.
+- In the section to Choose where to store your data, select your region.
+- In the section to Choose how to store your data, choose Standard.
+- Leave, all of the other defaut settings as is, and click on Create.
+ Note: If prompted too, please allow publlic access so that anyone with the image URL can see the image.
+3. Create Service Account For Access
+- In the left hand navigation, select IAM & Admin.
+- From the left hand navigation, select Service Accounts.
+- Click on Create Service Accounts.
+- Give the service account a name, then click Create and Continue.
+- In permissions, select Storage Admin and Storage Object Admin for the Roles.
+- Set your access controls to your desired settings.
+- Click Create.
+4. Service Account For Image Upload
+- Navigate to your service account and select Keys from the top menu.
+- Click Add Key, choose Create new key, select JSON, and click Create. 
+- The JSON key file will be generated and downloaded automatically to your computer.
+5. Adding Service Account To Your Application
+- Save the downloaded JSON file into your project.
+    Example path: config/service-account.json
+- Add config/service-account.json to your .gitignore to prevent it from being committed.
+- Add the following environment variables to your .env file:
+    GOOGLE_APPLICATION_CREDENTIALS_JSON=./config/service-account.json
+    BUCKET_NAME=YourBucketName
+    IMAGE_UPLOAD_BASE_URL=https://storage.googleapis.com
 
 #### MONGO DB Connection
 
@@ -61,6 +101,10 @@ npm install
     - morgan
     - passport
     - passport-google-oauth2
+    - @google-cloud/storage
+    - multer
+    - jsonwebtoken
+    - bcrypt
 
 ## Application Set-Up Instructions
 
@@ -74,49 +118,35 @@ https://github.com/Code-the-Dream-School/jj-practicum-team-4-back
 
 3. Add the following variables in the .env file
 ```bash
+#Google Project Console
 GOOGLE_CLIENT_ID=the_google_client_id_from_your_google_developer_console
 GOOGLE_CLIENT_SECRET=the_google_client_secret_from_your_google_developer_console
 GOOGLE_CALLBACK_URL=the_google_callback_url_from_your_google_developer_console
+
+#Google Cloud Storage Console
+GOOGLE_APPLICATION_CREDENTIALS_JSON=./config/service-account.json
+BUCKET_NAME=your_bucket_name
+IMAGE_UPLOAD_BASE_URL=https://storage.googleapis.com
+
+#JWT
+JWT_SECRET=your_JWT_secret
+JWT_LIFETIME=your_JWT_lifetime
+
+#Session 
 SESSION_SECRET=your_session_secret
+
+#Database
 MONGO_URI=your_mongo_url
+
+#Server
 PORT=your_port_value
 ```
-Please note, the GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_CALLBACK_URL can be retrieved from the application google cloud hub.
+Please note, the GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BUCKET_NAME, and GOOGLE_CALLBACK_URL can be retrieved from the application google cloud hub.
 
 4. Run the application
 ```bash
 node src/server.js
 ```
------------------------------------------------------------------------
-# Back-End Repo for Node/React Practicum
 
-This will be the API for the front-end React app part of your practicum project.
 
-These instructions are for the **front-end team** so they can setup their local development environment to run 
-both the back-end server and their front-end app. You can go through these steps during your first group meeting 
-in case you need assistance from your mentors.
 
->The back-end server will be running on port 8000. The front-end app will be running on port 3000. You will need to run both the back-end server and the front-end app at the same time to test your app.
-
-### Setting up local development environment
-
-1. Create a folder to contain both the front-end and back-end repos 
-2. Clone this repository to that folder
-3. Run `npm install` to install dependencies
-4. Pull the latest version of the `main` branch (when needed)
-5. Run `npm run dev` to start the development server
-6. Open http://localhost:8000/api/v1/ with your browser to test.
-7. Your back-end server is now running. You can now run the front-end app.
-
-#### Running the back-end server in Visual Studio Code
-
-Note: In the below example, the group's front-end repository was named `bb-practicum-team1-front` and the back-end repository was named `bb-practicum-team-1-back`. Your repository will have a different name, but the rest should look the same.
-![vsc running](images/back-end-running-vsc.png)
-
-#### Testing the back-end server API in the browser
-
-![browser server](images/back-end-running-browser.png)
-
->Update the .node-version file to match the version of Node.js the **team** is using. This is used by Render.com to [deploy the app](https://render.com/docs/node-version).
-
-just adding something to test
