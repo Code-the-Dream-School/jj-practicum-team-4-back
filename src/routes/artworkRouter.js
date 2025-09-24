@@ -12,7 +12,7 @@ router.get("/:id", getArtworkById)
 router.delete("/:id", isLoggedIn, deleteArtwork)
 
 // Like Functionality
-router.get("/:id/likes", getArtworkLikes)
+router.get("/:id/likes", isLoggedIn, getArtworkLikes)
 router.post("/:id/likes", isLoggedIn, addArtworkLike)
 router.delete("/:id/likes", isLoggedIn, removeArtworkLike)
 
