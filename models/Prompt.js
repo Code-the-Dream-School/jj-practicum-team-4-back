@@ -33,7 +33,4 @@ module.exports = mongoose.model('Prompt', PromptSchema)
 
 
 
-//Notes:
-//https://www.geeksforgeeks.org/mongodb/how-to-create-and-use-enum-in-mongoose/
-//https://mongoosejs.com/docs/tutorials/dates.html
 

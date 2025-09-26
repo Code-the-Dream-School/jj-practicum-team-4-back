@@ -1,7 +1,7 @@
-const { Storage } = require("@google-cloud/storage")
-require("dotenv").config()
-const Multer = require("multer") 
-const { Readable } = require("stream")
+const { Storage } = require('@google-cloud/storage')
+require('dotenv').config()
+const Multer = require('multer') 
+const { Readable } = require('stream')
 
 
 const upload = Multer({

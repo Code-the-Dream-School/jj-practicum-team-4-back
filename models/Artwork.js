@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose')
 
 
@@ -51,7 +50,7 @@ const ArtworkSchema = new mongoose.Schema({
     'Marker'],
       default: 'Digital Art',
     },
-    voters: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    voters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
  },
   { timestamps: true }
 )

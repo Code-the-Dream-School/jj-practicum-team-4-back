@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const ChallengeSchema = new mongoose.Schema(
   {
@@ -27,13 +27,10 @@ const ChallengeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// indexes for faster queries and weekly uniqueness
+
 ChallengeSchema.index({ start_date: 1, end_date: 1 }, { unique: true });
 ChallengeSchema.index({ end_date: 1 });
 ChallengeSchema.index({ prompt_id: 1 });
 
 module.exports = mongoose.model("Challenge", ChallengeSchema);
 
-//Notes:
-//https://mongoosejs.com/docs/validation.html
-//https://mongoosejs.com/docs/api/schematype.html#SchemaType.prototype.validate()
