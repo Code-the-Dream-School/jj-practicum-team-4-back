@@ -61,8 +61,8 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false, 
     },
-	userArtworks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],
-	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],    
+	userArtworks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Artwork' }],
+	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Artwork' }],    
   },
    { timestamps: true }
 )

@@ -96,7 +96,7 @@ const register = async (req, res) => {
 
 const getCurrentUser = (req, res) => {
     try {
-        // If user is authenticated via session or token
+        
         if (req.user) {
             const userData = {
                 id: req.user._id,

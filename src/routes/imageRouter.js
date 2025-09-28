@@ -1,6 +1,6 @@
-const express = require("express")
+const express = require('express')
 const router = express.Router()
-const imageController = require("../controllers/imageController")
+const imageController = require('../controllers/imageController')
 
 router.post('/upload', imageController.uploadSingleImage,imageController.uploadImage)
 
