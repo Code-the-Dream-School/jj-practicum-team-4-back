@@ -1,4 +1,6 @@
+const mongoose = require("mongoose");
 const Artwork = require("../../models/Artwork");
+const Challenge = require("../../models/Challenge");
 
 // GET /api/challenge/winners
 async function listWinners(req, res) {
@@ -6,7 +8,30 @@ async function listWinners(req, res) {
     const raw = parseInt(req.query.limit, 10);
     const limit = Number.isFinite(raw) ? Math.max(1, Math.min(raw, 100)) : 5;
 
-    const docs = await Artwork.find({})
+  const now = new Date();
+
+
+      const prevChallenge = await Challenge.findOne({
+        end_date: { $lte: now },
+      })
+        .sort({ end_date: -1, _id: -1 })
+        .lean();
+  
+      if (!prevChallenge) {
+        return res.status(200).json([]); // Nothing finished yet
+      }
+  
+      let filter = {
+        createdAt: {
+          $gte: new Date(prevChallenge.start_date),
+          $lt: new Date(prevChallenge.end_date),
+        },
+      };
+      if (prevChallenge.prompt_id) {
+        filter.prompt_id = new mongoose.Types.ObjectId(prevChallenge.prompt_id);
+      }
+
+    const docs = await Artwork.find(filter)
       .sort({ like_counter: -1, createdAt: -1, _id: -1 }) // tie-breakers
       .limit(limit)
       .select("title image_url like_counter user_id media_tag")
