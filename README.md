@@ -2,6 +2,8 @@
 
 ARTHIVE is a creative platform designed for artists of all levels who want inspiration and community. Each week, the app sends out a unique art challenge to spark creativity and encourage participation. Artists can upload their work, explore others’ submissions, and engage with the community through feedback and support. By combining structured challenges with a collaborative space, ARTHIVE helps artists stay motivated, improve their skills, and share their creativity with a wider audience.
 
+#### Database Schema Diagram
+![Models diagram](./images/models.png)
 ## Prerequisites
 
 Before running this project, please make sure your development environment has the following installed:
